@@ -12,5 +12,6 @@ namespace BACS3403_Project.Models
         // user ID from AspNetUser table.
         public string OwnerID { get; set; }
         public string Name { get; set; }
+        public ICollection<Recording> Recordings { get; set; }
     }
 }

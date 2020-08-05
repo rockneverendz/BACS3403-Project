@@ -8,8 +8,6 @@ namespace BACS3403_Project.Models
 {
     public class QuestionGroup
     {
-        public int QuestionGroupId { get; set; }
-
         /*
             Task type 1 – Multiple choice
             Task type 2 – Matching
@@ -18,8 +16,13 @@ namespace BACS3403_Project.Models
             Task type 5 – Sentence completion
             Task type 6 – Short-answer questions
         */
-        public int Task { get; set; }
+
+        public int QuestionGroupId { get; set; }
+        public int TaskType { get; set; }
         public string QuestionGroupURL { get; set; }
-        public Question[] Questions { get; set; }
+        public int RecordingID { get; set; }
+
+        public Recording Recording { get; set; }
+        public ICollection<MarkScheme> MarkSchemes { get; set; }
     }
 }
