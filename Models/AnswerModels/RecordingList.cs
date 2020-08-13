@@ -9,9 +9,8 @@ namespace BACS3403_Project.Models
     {
         public int CandidateID { get; set; }
         public int RecordingID { get; set; }
-        public int AnswerListID { get; set; }
         public Candidate Candidate { get; set; }
         public Recording Recording { get; set; }
-        public AnswerList AnswerList { get; set; }
+        public ICollection<Answer> Answers { get; set; }
     }
 }

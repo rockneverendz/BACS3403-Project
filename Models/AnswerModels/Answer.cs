@@ -3,9 +3,11 @@
     public class Answer
     {
         public int AnswerID { get; set; }
+        public int Index { get; set; }
         public string WrittenAnswer { get; set; }
-        public int AnswerListID { get; set; }
+        public int CandidateID { get; set; }
+        public int RecordingID { get; set; }
 
-        public AnswerList AnswerList { get; set; }
+        public RecordingList RecordingList{ get; set; }
     }
 }
