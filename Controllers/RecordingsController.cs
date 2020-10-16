@@ -61,7 +61,7 @@ namespace BACS3403_Project.Controllers.Question
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RecordingId,Part,AudioURL")] Recording recording)
+        public async Task<IActionResult> Create([Bind("RecordingId,Part,AudioURL,Available")] Recording recording)
         {
             if (ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace BACS3403_Project.Controllers.Question
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RecordingId,Part,AudioURL")] Recording recording)
+        public async Task<IActionResult> Edit(int id, [Bind("RecordingId,Part,AudioURL,Available")] Recording recording)
         {
             if (id != recording.RecordingId)
             {

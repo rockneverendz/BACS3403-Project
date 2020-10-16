@@ -28,12 +28,16 @@
             <th>
                 @Html.DisplayNameFor(model => model.AudioURL)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Available)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <!-- TODO Clicking the record should take user to Details.-->
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
@@ -44,6 +48,11 @@
                 @Html.DisplayFor(modelItem => item.AudioURL)
             </td>
             <td>
+                <!-- TODO Availabilty should be a icon (green/grey) on the left side of the record.-->
+                @Html.DisplayFor(modelItem => item.Available)
+            </td>
+            <td>
+                <!-- TODO This should be the three dots on the right side of the record.-->
                 <a asp-action="Edit" asp-route-id="@item.RecordingId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.RecordingId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.RecordingId">Delete</a>
