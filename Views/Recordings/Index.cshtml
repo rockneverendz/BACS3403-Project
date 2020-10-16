@@ -1,0 +1,54 @@
+﻿@model IEnumerable<BACS3403_Project.Models.Recording>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<p>
+    <a asp-action="Index">All</a>
+    <a asp-action="Index" asp-route-part=1>1</a>
+    <a asp-action="Index" asp-route-part=2>2</a>
+    <a asp-action="Index" asp-route-part=3>3</a>
+    <a asp-action="Index" asp-route-part=4>4</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Part)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AudioURL)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Part)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AudioURL)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RecordingId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RecordingId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RecordingId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
