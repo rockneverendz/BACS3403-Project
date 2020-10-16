@@ -19,9 +19,11 @@ namespace BACS3403_Project.Models
                      e.g. a university lecture.
         */
         public int RecordingId { get; set; }
-        
+
+        public string Title { get; set; }
         public int Part { get; set; }
         public string AudioURL { get; set; }
+        public bool Available { get; set; }
         public Examiner Examimer { get; set; }
         public ICollection<QuestionGroup> QuestionGroups { get; set; }
     }
