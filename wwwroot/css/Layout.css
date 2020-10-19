@@ -199,7 +199,7 @@ a.article, a.article:hover {
     border: 1px solid #ccc;
     background-color: #f1f1f1;
     width: 20%;
-    height: 450px;
+    height: 550px;
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -207,7 +207,7 @@ a.article, a.article:hover {
     display: block;
     background-color: inherit;
     color: black;
-    padding: 22px 16px;
+    padding: 40px 30px;
     width: 100%;
     border: none;
     outline: none;
@@ -233,7 +233,7 @@ a.article, a.article:hover {
     border: 1px solid #ccc;
     width: 80%;
     border-left: none;
-    height: 100%;
+    height: 550px;
 }
 
 #partHeader {
