@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BACS3403_Project.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<Examiner>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -21,8 +21,7 @@ namespace BACS3403_Project.Data
         public DbSet<BACS3403_Project.Models.Seat> Seats { get; set; }
         public DbSet<BACS3403_Project.Models.Test> Tests { get; set; }
         public DbSet<BACS3403_Project.Models.Candidate> Candidates { get; set; }
-        public DbSet<BACS3403_Project.Models.Examiner> Examiners { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Call back the overridden function
@@ -34,8 +33,7 @@ namespace BACS3403_Project.Data
             modelBuilder.Entity<Seat>().ToTable("Seat");
             modelBuilder.Entity<Test>().ToTable("Test");
             modelBuilder.Entity<Candidate>().ToTable("Candidate");
-            modelBuilder.Entity<Examiner>().ToTable("Examiner");
-
+            
             modelBuilder.Entity<RecordingList>()
                 .HasKey(rl => new { rl.CandidateID, rl.RecordingID });
 

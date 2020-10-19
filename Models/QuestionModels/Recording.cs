@@ -24,6 +24,8 @@ namespace BACS3403_Project.Models
         public int Part { get; set; }
         public string AudioURL { get; set; }
         public bool Available { get; set; }
+        public string ExaminerID { get; set; }
+        
         public Examiner Examimer { get; set; }
         public ICollection<QuestionGroup> QuestionGroups { get; set; }
     }
