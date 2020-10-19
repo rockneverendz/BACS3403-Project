@@ -27,12 +27,11 @@ namespace BACS3403_Project.Controllers.Question
         // GET: Recordings/Index/1
         public async Task<IActionResult> Index(int? part)
         {
-            if (part == null)
-                return View(await _context.Recordings.ToListAsync());
-            else 
-                return View(await _context.Recordings
-                    .Where(r => r.Part == part)
-                    .ToListAsync());
+            if (part == null) part = 1;
+            
+            return View(await _context.Recordings
+                .Where(r => r.Part == part)
+                .ToListAsync());
         }
 
         // GET: Recordings/Details/5
