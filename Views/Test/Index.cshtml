@@ -1,0 +1,80 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>Hello from our View Template!</p>
+
+<form method="post">
+    <textarea name="content" id="editor">
+            &lt;p&gt;This is some sample content.&lt;/p&gt;
+    </textarea>
+    <button asp-controller="Test" asp-action="Create" class="btn btn-primary m-3">Create</button>
+</form>
+
+@section Scripts {
+    <script src="~/lib/ckeditor5/build/ckeditor.js"></script>
+    <script>
+    ClassicEditor
+            .create(document.querySelector('#editor'), {
+
+                toolbar: {
+                    items: [
+                        'undo',
+                        'redo',
+                        '|',
+                        'heading',
+                        '|',
+                        'fontFamily',
+                        'fontSize',
+                        '|',
+                        'bold',
+                        'italic',
+                        'underline',
+                        'code',
+                        'horizontalLine',
+                        'bulletedList',
+                        'numberedList',
+                        '|',
+                        'indent',
+                        'outdent',
+                        '|',
+                        'imageUpload',
+                        'blockQuote',
+                        'insertTable'
+                    ]
+                },
+                language: 'en',
+                image: {
+                    toolbar: [
+                        'imageTextAlternative',
+                        'imageStyle:full',
+                        'imageStyle:side'
+                    ]
+                },
+                table: {
+                    contentToolbar: [
+                        'tableColumn',
+                        'tableRow',
+                        'mergeTableCells',
+                        'tableCellProperties',
+                        'tableProperties'
+                    ]
+                },
+                licenseKey: '',
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(error => {
+                console.error('Oops, something gone wrong!');
+                console.error('Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id and the error stack trace:');
+                console.warn('Build id: 571780nchaof-wu4owlwikxxz');
+                console.error(error);
+            });
+    </script>
+}
