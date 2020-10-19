@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BACS3403_Project.Data;
 using BACS3403_Project.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BACS3403_Project.Controllers.Question
 {
     public class RecordingsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Examiner> _userManager;
 
-        public RecordingsController(ApplicationDbContext context)
+        public RecordingsController(ApplicationDbContext context, UserManager<Examiner> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Recordings
@@ -65,6 +68,9 @@ namespace BACS3403_Project.Controllers.Question
         {
             if (ModelState.IsValid)
             {
+                // Bind Examiner ID to object
+                recording.ExaminerID = _userManager.GetUserId(User);
+
                 _context.Add(recording);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
