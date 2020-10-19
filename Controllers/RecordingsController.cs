@@ -43,6 +43,7 @@ namespace BACS3403_Project.Controllers.Question
             }
 
             var recording = await _context.Recordings
+                .Include(r => r.QuestionGroups)
                 .FirstOrDefaultAsync(m => m.RecordingId == id);
             if (recording == null)
             {

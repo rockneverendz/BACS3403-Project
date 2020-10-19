@@ -35,6 +35,40 @@
             @Html.DisplayFor(model => model.Available)
         </dd>
     </dl>
+    <p>
+        <a asp-controller="QuestionGroups" 
+           asp-action="Create" 
+           asp-route-recordingId="@Model.RecordingId">Create New Question Group</a>
+    </p>
+    <table class="table">
+        <tbody>
+            @{
+                var QuestionModel = Model.QuestionGroups;
+                if (QuestionModel != null)
+                {
+                    foreach (var item in QuestionModel.ToList())
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TaskType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.QuestionGroupURL)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Recording.RecordingId)
+                            </td>
+                            <td>
+                                <a asp-controller="QuestionGroups" asp-action="Edit" asp-route-id="@item.QuestionGroupId">Edit</a> |
+                                <a asp-controller="QuestionGroups" asp-action="Details" asp-route-id="@item.QuestionGroupId">Details</a> |
+                                <a asp-controller="QuestionGroups" asp-action="Delete" asp-route-id="@item.QuestionGroupId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.RecordingId">Edit</a> |
