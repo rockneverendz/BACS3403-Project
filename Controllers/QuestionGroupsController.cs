@@ -22,13 +22,6 @@ namespace BACS3403_Project.Controllers
             _userManager = userManager;
         }
 
-        // GET: QuestionGroups
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Questions.Include(q => q.Recording);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
         // GET: QuestionGroups/Details/5
         public async Task<IActionResult> Details(int? id)
         {
