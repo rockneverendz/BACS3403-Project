@@ -3,13 +3,13 @@
 }
 
 <div class="tab card">
-	<button id="defaultOpen" class="tablinks" onclick="questPart(event, 'Part1')">Part 1</button>
-	<button class="tablinks" onclick="questPart(event, 'Part2')">Part 2</button>
-	<button class="tablinks" onclick="questPart(event, 'Part3')">Part 3</button>
-	<button class="tablinks" onclick="questPart(event, 'Part4')">Part 4</button>
+	<button id="defaultOpen" class="tablinks" onclick="questPart(event, 'Part1')"><h5 class="mb-0">Part 1</h5></button>
+	<button class="tablinks" onclick="questPart(event, 'Part2')"><h5 class="mb-0">Part 2</h5></button>
+	<button class="tablinks" onclick="questPart(event, 'Part3')"><h5 class="mb-0">Part 3</h5></button>
+	<button class="tablinks" onclick="questPart(event, 'Part4')"><h5 class="mb-0">Part 4</h5></button>
 </div>
 
-<div id="Part1" class="tabcontent card">
+<div id="Part1" class="tabcontent card overflow-auto">
 
 	<div id="partHeader">
 		<h3>Part 1 Recordings</h3>
@@ -20,73 +20,144 @@
 	<p>A conversation between two people set in everyday social context</p>
 	<hr>
 
-	<div class="card">
-		<div class="card-body recording">
-			<p class="recText">
-				<i class="fa fa-check-circle" aria-hidden="true"></i>
-				&nbsp;&nbsp; 1. A solar Heating System
-			</p>
-			<button type="button" class="btn btn-light btn-sm">
-				<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-			</button>
+	@*Ouput the recordings for Part 1 here*@
+
+	@for (int i = 1; i <= 5; i++)
+	{
+		<div class="card mb-2">
+			<div class="card-body recording">
+				<div class="recText">
+					<a href="#">
+						<i class="fa fa-check-circle @(i <=3 ? "text-success":"text-secondary")" aria-hidden="true"></i>
+					</a>
+							&nbsp;&nbsp; @i. A solar Heating System
+				</div>
+				<div class="dropdown">
+					<button class="btn btn-light dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil text-primary float-right mt-1" aria-hidden="true"></i></a>
+						<a class="dropdown-item" href="#">Delete <i class="fa fa-trash text-danger float-right mt-1" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			</div>
 		</div>
+	}
+</div>
+
+<div id="Part2" class="tabcontent card overflow-auto">
+	<div id="partHeader">
+		<h3>Part 2 Recordings</h3>
+		<button type="button" class="btn btn-primary">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> New Recording
+		</button>
 	</div>
-	<div class="card">
-		<div class="card-body recording">
-			<p class="recText">
-				<i class="fa fa-check-circle" aria-hidden="true"></i>
-				&nbsp;&nbsp; 2. Chambers Theme Park
-			</p>
-			<button type="button" class="btn btn-light btn-sm">
-				<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-			</button>
+	<p>A monologue set in an everyday social context, e.g. a speech about local facilities.</p>
+	<hr>
+
+	@*Ouput the recordings for Part 2 here*@
+
+	@for (int i = 1; i <= 5; i++)
+	{
+		<div class="card mb-2">
+			<div class="card-body recording">
+				<div class="recText">
+					<a href="#">
+						<i class="fa fa-check-circle @(i <=3 ? "text-success":"text-secondary")" aria-hidden="true"></i>
+					</a>
+					&nbsp;&nbsp; @i. A solar Heating System
+				</div>
+				<div class="dropdown">
+					<button class="btn btn-light dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil text-primary float-right mt-1" aria-hidden="true"></i></a>
+						<a class="dropdown-item" href="#">Delete <i class="fa fa-trash text-danger float-right mt-1" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
+	}
 
-	<div class="card">
-		<div class="card-body recording">
-			<p class="recText">
-				<i class="fa fa-check-circle" aria-hidden="true"></i>
-				&nbsp;&nbsp; 3. Consequences of Super Volcanoes
-			</p>
-			<button type="button" class="btn btn-light btn-sm">
-				<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-			</button>
+</div>
+
+<div id="Part3" class="tabcontent card overflow-auto">
+	<div id="partHeader">
+		<h3>Part 3 Recordings</h3>
+		<button type="button" class="btn btn-primary">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> New Recording
+		</button>
+	</div>
+	<p>A conversation between up to four people set in an educational or training context, e.g. a university tutor and a student discussing an assignment.</p>
+	<hr>
+
+	@*Ouput the recordings for Part 3 here*@
+
+	@for (int i = 1; i <= 5; i++)
+	{
+		<div class="card mb-2">
+			<div class="card-body recording">
+				<div class="recText">
+					<a href="#">
+						<i class="fa fa-check-circle @(i <=3 ? "text-success":"text-secondary")" aria-hidden="true"></i>
+					</a>
+					&nbsp;&nbsp; @i. A solar Heating System
+				</div>
+				<div class="dropdown">
+					<button class="btn btn-light dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil text-primary float-right mt-1" aria-hidden="true"></i></a>
+						<a class="dropdown-item" href="#">Delete <i class="fa fa-trash text-danger float-right mt-1" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			</div>
 		</div>
+	}
+</div>
+
+<div id="Part4" class="tabcontent card overflow-auto">
+	<div id="partHeader">
+		<h3>Part 4 Recordings</h3>
+		<button type="button" class="btn btn-primary">
+			<i class="fa fa-plus-circle" aria-hidden="true"></i> New Recording
+		</button>
 	</div>
-</div>
+	<p>A monologue on an academic subject, e.g. a university lecture.</p>
+	<hr>
 
-<div id="Part2" class="tabcontent card">
-	<h3>Part 2</h3>
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo quas est, repellendus enim iusto
-		accusamus. Laboriosam accusantium cumque accusamus modi illum itaque vitae ab dicta quidem
-		architecto perferendis, voluptates tempore?
-	</p>
-</div>
+	@*Ouput the recordings for Part 4 here*@
 
-<div id="Part3" class="tabcontent card">
-	<h3>Part 3</h3>
-	<p>
-		Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus architecto amet ducimus. Unde
-		eligendi harum fugiat soluta? Deserunt nam eligendi ipsum, quas nesciunt, quae aliquid, corrupti
-		atque numquam saepe magnam.
-	</p>
-</div>
+	@for (int i = 1; i <= 5; i++)
+	{
+		<div class="card mb-2">
+			<div class="card-body recording">
+				<div class="recText">
+					<a href="#">
+						<i class="fa fa-check-circle @(i <=3 ? "text-success":"text-secondary")" aria-hidden="true"></i>
+					</a>
+					&nbsp;&nbsp; @i. A solar Heating System
+				</div>
+				<div class="dropdown">
+					<button class="btn btn-light dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="#">Edit <i class="fa fa-pencil text-primary float-right mt-1" aria-hidden="true"></i></a>
+						<a class="dropdown-item" href="#">Delete <i class="fa fa-trash text-danger float-right mt-1" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
 
-<div id="Part4" class="tabcontent card">
-	<h3>Part 4</h3>
-	<p>
-		Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus architecto amet ducimus. Unde
-		eligendi harum fugiat soluta? Deserunt nam eligendi ipsum, quas nesciunt, quae aliquid, corrupti
-		atque numquam saepe magnam.
-	</p>
 </div>
-
 
 @section Scripts {
 	<script>
-
 		//Set default open part1 tab
 		$('#defaultOpen').click();
 
@@ -113,6 +184,5 @@
 			//document.getElementById(partNo).style.display = "block";
 			evt.currentTarget.className += " active";
 		}
-
 	</script>
 }
