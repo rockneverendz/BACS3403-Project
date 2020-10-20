@@ -1,0 +1,18 @@
+SET IDENTITY_INSERT [dbo].[Recording] ON
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1001, 1, NULL, 1, N'Car Tours in the USA', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1002, 2, NULL, 1, N'Leisure club', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1003, 3, NULL, 1, N'Global Design Competition', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1004, 4, NULL, 1, N'The Sprit Bar', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1005, 1, NULL, 1, N'Transport Survey', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1006, 2, NULL, 1, N'New City Developments', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1007, 3, NULL, 1, N'The Later Life of Thor Heyerdahl', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1008, 4, NULL, 1, N'The Future of Management', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1009, 1, NULL, 1, N'Early Learning Childcare Centre', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1010, 2, NULL, 1, N'The Dolphin Conservation Trust', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1011, 3, NULL, 1, N'Theatre Studies Course', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1012, 4, NULL, 1, N'Self-regulatory focus theory and leadership', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1013, 1, NULL, 1, N'Thorndyke’s Builders', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1014, 2, NULL, 1, N'Manham Port', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1015, 3, NULL, 1, N'Work placement', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1016, 4, NULL, 1, N'Nanotechnology: technology on a small scale', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
+SET IDENTITY_INSERT [dbo].[Recording] OFF
