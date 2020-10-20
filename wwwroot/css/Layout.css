@@ -188,6 +188,10 @@ a.article, a.article:hover {
 
 }
 
+
+
+/*                        RECORDINGS INDEX STYLINGS                        */
+
 /* Tab Styling */
 * {
     box-sizing: border-box
@@ -203,7 +207,7 @@ a.article, a.article:hover {
 }
 
 /* Style the buttons that are used to open the tab content */
-.tab button {
+.tab a {
     display: block;
     background-color: inherit;
     color: black;
@@ -217,14 +221,15 @@ a.article, a.article:hover {
 }
 
 /* Change background color of buttons on hover */
-.tab button:hover {
+.tab a:hover {
     background-color: #ddd;
 }
 
 /* Create an active/current "tab button" class */
-.tab button.active {
+.tab a.active {
     background-color: #ccc;
 }
+
 
 /* Style the tab content */
 .tabcontent {
@@ -254,3 +259,7 @@ a.article, a.article:hover {
     padding: 10px;
     color: black;
 }
+
+
+
+

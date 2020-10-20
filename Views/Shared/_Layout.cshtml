@@ -19,19 +19,19 @@
 		<!-- Sidebar -->
 		<nav id="sidebar">
 			<div class="sidebar-header">
-
-
-				<img id="logoimg" src="~/resource/MainLogoAsset1.png" alt="">
+				<a asp-controller="Recordings" asp-action="Index" asp-route-part=1>
+					<img id="logoimg" src="~/resource/MainLogoAsset1.png" alt="">
+				</a>
 			</div>
 
 			<ul class="list-unstyled components">
 				<p>Dashboard</p>
 				<li class="active">
-					<a href="#QuestionBank">Question Bank</a>
+					<a asp-controller="Recordings" asp-action="Index" asp-route-part=1 >Question Bank</a>
 				</li>
 				<li>
 					<a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false"
-					   class="dropdown-toggle">Test Administration</a>
+					   class="dropdown-toggle show">Test Administration</a>
 					<ul class="collapse list-unstyled" id="adminSubmenu">
 						<li>
 							<a href="#">Generate Seat Number</a>
@@ -46,7 +46,7 @@
 				</li>
 				<li>
 					<a href="#gradeSubmenu" data-toggle="collapse" aria-expanded="false"
-					   class="dropdown-toggle">Grades </a>
+					   class="dropdown-toggle show">Grades </a>
 					<ul class="collapse list-unstyled" id="gradeSubmenu">
 						<li>
 							<a href="#">Review Test Answers</a>
