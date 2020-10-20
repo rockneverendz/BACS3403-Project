@@ -64,7 +64,7 @@ namespace BACS3403_Project.Controllers.Question
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RecordingId,Part,AudioURL,Available")] Recording recording)
+        public async Task<IActionResult> Create([Bind("RecordingId,Part,AudioURL,Available,Title")] Recording recording)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +99,7 @@ namespace BACS3403_Project.Controllers.Question
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RecordingId,Part,AudioURL,Available")] Recording recording)
+        public async Task<IActionResult> Edit(int id, [Bind("RecordingId,Part,AudioURL,Available,Title")] Recording recording)
         {
             if (id != recording.RecordingId)
             {
@@ -162,11 +162,18 @@ namespace BACS3403_Project.Controllers.Question
         {
             return _context.Recordings.Any(e => e.RecordingId == id);
         }
-
-        public IActionResult TestIndex()
+        
+        
+        
+        /*
+        public async Task<IActionResult> TestIndex(int? part)
         {
-            return View();   
-        }
+            if (part == null) part = 1;
+
+            return View(await _context.Recordings
+                .Where(r => r.Part == part)
+                .ToListAsync());
+        }*/
 
 
     }
