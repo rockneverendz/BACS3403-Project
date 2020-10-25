@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BACS3403_Project.Data;
 using BACS3403_Project.Models;
 using Microsoft.AspNetCore.Identity;
+using BACS3403_Project.ViewModels;
+using System.IO;
 
 namespace BACS3403_Project.Controllers.Question
 {
@@ -44,6 +46,7 @@ namespace BACS3403_Project.Controllers.Question
 
             var recording = await _context.Recordings
                 .Include(r => r.QuestionGroups)
+                .ThenInclude(q => q.MarkSchemes)
                 .FirstOrDefaultAsync(m => m.RecordingId == id);
             if (recording == null)
             {
@@ -64,18 +67,54 @@ namespace BACS3403_Project.Controllers.Question
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RecordingId,Part,AudioURL,Available,Title")] Recording recording)
+        public async Task<IActionResult> Create(RecordingCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Bind Examiner ID to object
-                recording.ExaminerID = _userManager.GetUserId(User);
 
+                string uniqueFileName = null;
+                string filePart = "";
+
+                if(model.AudioRecording != null)
+				{
+					switch (model.Part)
+					{
+                        case 1:
+                            filePart = "QuestionRecordings\\Part1\\";
+                            break;
+                        case 2:
+                            filePart = "QuestionRecordings\\Part2\\";
+                            break;
+                        case 3:
+                            filePart = "QuestionRecordings\\Part3\\";
+                            break;
+                        case 4:
+                            filePart = "QuestionRecordings\\Part4\\";
+                            break;
+                        default:
+							break;
+					}
+
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.AudioRecording.FileName;
+                    string path = Path.Combine(filePart, uniqueFileName);
+                    model.AudioRecording.CopyTo(new FileStream(path, FileMode.Create));
+				}
+
+                Recording recording = new Recording
+                {
+                    Title = model.Title,
+                    Part = model.Part,
+                    Available = model.Available,
+                    // Bind Examiner ID to object
+                    ExaminerID = _userManager.GetUserId(User),
+                    AudioURL = uniqueFileName
+                };
+           
                 _context.Add(recording);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(recording);
+            return View(model);
         }
 
         // GET: Recordings/Edit/5
@@ -154,6 +193,9 @@ namespace BACS3403_Project.Controllers.Question
         {
             var recording = await _context.Recordings.FindAsync(id);
             _context.Recordings.Remove(recording);
+
+
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -163,17 +205,7 @@ namespace BACS3403_Project.Controllers.Question
             return _context.Recordings.Any(e => e.RecordingId == id);
         }
         
-        
-        
-        /*
-        public async Task<IActionResult> TestIndex(int? part)
-        {
-            if (part == null) part = 1;
-
-            return View(await _context.Recordings
-                .Where(r => r.Part == part)
-                .ToListAsync());
-        }*/
+       
 
 
     }

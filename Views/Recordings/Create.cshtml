@@ -1,48 +1,73 @@
-﻿@model BACS3403_Project.Models.Recording
+﻿@model BACS3403_Project.ViewModels.RecordingCreateViewModel
 
 @{
-    ViewData["Title"] = "Create";
+	ViewData["Title"] = "New Recording";
 }
 
-<h1>Create</h1>
 
-<h4>Recording</h4>
+<h3>Add New Recording</h3>
+<h4>Section/Part @Context.Request.Query["part"]</h4>
+
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Part" class="control-label"></label>
-                <input asp-for="Part" class="form-control" />
-                <span asp-validation-for="Part" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AudioURL" class="control-label"></label>
-                <input asp-for="AudioURL" class="form-control" />
-                <span asp-validation-for="AudioURL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Available" class="control-label"></label>
-                <input asp-for="Available" class="form-control" />
-                <span asp-validation-for="Available" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+<div class="container">
+	<form enctype="multipart/form-data" asp-action="Create">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-row mb-3">
+			<div class="col-4">
+				<label asp-for="Title" class="control-label"></label>
+				<input asp-for="Title" class="form-control" />
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+			<div class="col-4">
+				<label asp-for="Part" class="control-label"></label>
+				<input asp-for="Part" class="form-control" value="@Context.Request.Query["part"]" readonly />
+				<span asp-validation-for="Part" class="text-danger"></span>
+			</div>
+		</div>
+
+		<div class="form-row mb-3">
+			<div class="col-8">
+				<label asp-for="AudioRecording" class="control-label">Upload Recording</label>
+				<div class="custom-file">
+					<input asp-for="AudioRecording" class="custom-file-input" id="validatedCustomFile" required>
+					<label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+					<span asp-validation-for="AudioRecording" class="text-danger"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-row mb-3 ml-1">
+			<div class="custom-control custom-checkbox">
+				<input asp-for="Available" type="checkbox" class="custom-control-input" id="customCheck1">
+				<label asp-for="Available" class="custom-control-label" for="customCheck1">
+					Check this checkbox to enable this recording
+				</label>
+			</div>
+			<span asp-validation-for="Available" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<input type="submit" value="Create" class="btn btn-primary mt-3" />
+		</div>
+	</form>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-route-part="@Context.Request.Query["part"]">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+	<script>
+		$(document).ready(function () {
+			$('.custom-file-input').on("change", function () {
+				var filename = $(this).val().split("\\").pop();
+				$(this).next('.custom-file-label').html(filename);
+			});
+
+		});
+
+	</script>
 }

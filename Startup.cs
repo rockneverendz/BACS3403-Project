@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BACS3403_Project.Models;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace BACS3403_Project
 {
@@ -86,6 +88,13 @@ namespace BACS3403_Project
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                            Path.Combine(env.ContentRootPath, "QuestionRecordings")),
+                RequestPath = "/QuestionRecordings"
+            });
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -98,6 +107,8 @@ namespace BACS3403_Project
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+
         }
     }
 }

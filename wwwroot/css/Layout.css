@@ -142,7 +142,6 @@ a.article, a.article:hover {
 
 #content {
     width: calc(100% - 250px);
-
     min-height: 100vh;
     transition: all 0.3s;
     position: absolute;
@@ -153,6 +152,12 @@ a.article, a.article:hover {
 #content.active {
     width: 100%;
 }
+
+ul li a:active {
+    background: #fafafa !important;
+}
+
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES
@@ -260,6 +265,8 @@ a.article, a.article:hover {
     color: black;
 }
 
-
+#tabHeader{
+    background-color: #fafafa !important;
+}
 
 
