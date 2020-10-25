@@ -1,3 +1,6 @@
+DBCC CHECKIDENT ('[Recording]', RESEED, 0);
+GO
+
 SET IDENTITY_INSERT [dbo].[Recording] ON
 INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1001, 1, NULL, 1, N'Car Tours in the USA', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
 INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1002, 2, NULL, 1, N'Leisure club', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
@@ -16,3 +19,88 @@ INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [
 INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1015, 3, NULL, 1, N'Work placement', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
 INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [Title], [ExaminerID]) VALUES (1016, 4, NULL, 1, N'Nanotechnology: technology on a small scale', N'3865caf8-f86c-4b64-be4d-860929ee7e72')
 SET IDENTITY_INSERT [dbo].[Recording] OFF
+
+
+
+DBCC CHECKIDENT ('[QuestionGroup]', RESEED, 0);
+GO
+
+SET IDENTITY_INSERT [dbo].[QuestionGroup] ON
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1001, 4, N'~/QuestionsGrp/...', 1001)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1002, 4, N'~/QuestionsGrp/...', 1001)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1003, 1, N'~/QuestionsGrp/...', 1002)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1004, 5, N'~/QuestionsGrp/...', 1002)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1005, 1, N'~/QuestionsGrp/...', 1003)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1006, 4, N'~/QuestionsGrp/...', 1003)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1007, 6, N'~/QuestionsGrp/...', 1004)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1008, 4, N'~/QuestionsGrp/...', 1005)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1009, 1, N'~/QuestionsGrp/...', 1006)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1010, 2, N'~/QuestionsGrp/...', 1006)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1011, 1, N'~/QuestionsGrp/...', 1007)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1012, 1, N'~/QuestionsGrp/...', 1007)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1013, 1, N'~/QuestionsGrp/...', 1007)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1014, 4, N'~/QuestionsGrp/...', 1008)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1015, 4, N'~/QuestionsGrp/...', 1009)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1016, 1, N'~/QuestionsGrp/...', 1010)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1017, 1, N'~/QuestionsGrp/...', 1010)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1018, 2, N'~/QuestionsGrp/...', 1010)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1019, 1, N'~/QuestionsGrp/...', 1011)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1020, 2, N'~/QuestionsGrp/...', 1011)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1021, 4, N'~/QuestionsGrp/...', 1012)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1022, 4, N'~/QuestionsGrp/...', 1013)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1023, 4, N'~/QuestionsGrp/...', 1013)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1024, 1, N'~/QuestionsGrp/...', 1014)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1025, 4, N'~/QuestionsGrp/...', 1014)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1026, 1, N'~/QuestionsGrp/...', 1015)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1027, 1, N'~/QuestionsGrp/...', 1015)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1028, 2, N'~/QuestionsGrp/...', 1015)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1029, 1, N'~/QuestionsGrp/...', 1016)
+INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroupURL], [RecordingID]) VALUES (1030, 4, N'~/QuestionsGrp/...', 1016)
+SET IDENTITY_INSERT [dbo].[QuestionGroup] OFF
+
+
+DBCC CHECKIDENT ('[MarkScheme]', RESEED, 0);
+GO
+
+SET IDENTITY_INSERT [dbo].[MarkScheme] ON
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1001, 1, N'Ardleigh', NULL, 1001)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1002, 2, N'newspaper', NULL, 1001)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1003, 3, N'theme', NULL, 1001)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1004, 4, N'tent', NULL, 1001)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1005, 5, N'castle', NULL, 1001)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1006, 6, N'beach/beaches', NULL, 1001)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1007, 7, N'2020', NULL, 1002)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1008, 8, N'flight', NULL, 1002)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1009, 9, N'429', NULL, 1002)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1010, 10, N'dinner', NULL, 1002)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1011, 11, N'A,C', NULL, 1003)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1012, 12, N'A,C', NULL, 1003)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1013, 13, N'health problems', NULL, 1004)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1014, 14, N'safety rules', NULL, 1004)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1015, 15, N'plan', NULL, 1004)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1016, 16, N'joining', NULL, 1004)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1017, 17, N'free entry', NULL, 1004)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1018, 18, N'peak', NULL, 1004)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1019, 19, N'guests', NULL, 1004)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1020, 20, N'photo card/photo cards', NULL, 1004)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1021, 21, N'C', NULL, 1005)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1022, 22, N'A', NULL, 1005)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1023, 23, N'B', NULL, 1005)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1024, 24, N'A', NULL, 1005)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1025, 25, N'C', NULL, 1005)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1026, 26, N'presentation', NULL, 1006)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1027, 27, N'model', NULL, 1006)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1028, 28, N'material/materials', NULL, 1006)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1029, 29, N'grant', NULL, 1006)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1030, 30, N'technical', NULL, 1006)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1031, 31, N'gene', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1032, 32, N'power/powers', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1033, 33, N'strangers', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1034, 34, N'erosion', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1035, 35, N'islands', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1036, 36, N'roads', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1037, 37, N'fishing', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1038, 38, N'reproduction', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1039, 39, N'method/methods', NULL, 1007)
+INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [Option], [QuestionGroupID]) VALUES (1040, 40, N'expansion', NULL, 1007)
+SET IDENTITY_INSERT [dbo].[MarkScheme] OFF
