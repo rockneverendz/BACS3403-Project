@@ -80,16 +80,16 @@ namespace BACS3403_Project.Controllers.Question
 					switch (model.Part)
 					{
                         case 1:
-                            filePart = "QuestionRecordings\\Part1\\";
+                            filePart = "Storage\\AudioRecordings\\Part1\\";
                             break;
                         case 2:
-                            filePart = "QuestionRecordings\\Part2\\";
+                            filePart = "Storage\\AudioRecordings\\Part2\\";
                             break;
                         case 3:
-                            filePart = "QuestionRecordings\\Part3\\";
+                            filePart = "Storage\\AudioRecordings\\Part3\\";
                             break;
                         case 4:
-                            filePart = "QuestionRecordings\\Part4\\";
+                            filePart = "Storage\\AudioRecordings\\Part4\\";
                             break;
                         default:
 							break;

@@ -91,8 +91,8 @@ namespace BACS3403_Project
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                            Path.Combine(env.ContentRootPath, "QuestionRecordings")),
-                RequestPath = "/QuestionRecordings"
+                            Path.Combine(env.ContentRootPath, "Storage")),
+                RequestPath = "/Storage"
             });
 
             app.UseRouting();
