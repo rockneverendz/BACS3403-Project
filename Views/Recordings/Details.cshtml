@@ -2,8 +2,10 @@
 
 @{
 	ViewData["Title"] = "Details";
-	int questNo_1;
 	string[] optionArr = { "Multiple choice", "Matching", "Plan, map, diagram labelling", "Form, note, table, flow-chart, summary completion", "Sentence completion", "Short-answer questions"};
+
+
+	int questNo_1;
 
 	switch (Model.Part)
 	{
@@ -23,6 +25,7 @@
 			questNo_1 = 0;
 			break;
 	}
+
 
 }
 
@@ -47,7 +50,7 @@
 			<div class="pl-5 col-4">
 				<label asp-for="AudioURL" class="control-label"></label>
 				<audio controls>
-					<source src="@("/QuestionRecordings/Part" + Model.Part + "/" + Model.AudioURL)" type="audio/mpeg">
+					<source src="@("/Storage/AudioRecordings/Part" + Model.Part + "/" + Model.AudioURL)" type="audio/mpeg">
 					Your browser does not support the audio element.
 				</audio>
 			</div>
@@ -77,51 +80,43 @@
 	*@
 
 	@{
-		var QuestionModel1 = Model.QuestionGroups;
+		var QuestionModel = Model.QuestionGroups;
 
-		if (QuestionModel1 != null)
+		if (QuestionModel != null)
 		{
 
-			int flag = 0;
-
-			foreach (var item in QuestionModel1.ToList())
+			foreach (var item in QuestionModel.ToList())
 			{
 
 				<div class="card justify-content-center">
 					<div class="card-body">
-						@* Form Post to QuestionGroup Edit Controller *@
-						<form action="/" method="post">
+						<form action="" method="post">
 							<div class="form-inline">
 								<div class="form-group col-4">
 
-									@* Rmv question no and change to no of marking scheme*@
-
 									<label for="selectQuestNo" class="col-form-label  mx-3">Questions:</label>
-									<select class="custom-select" id="selectQuestNo">
+									<select class="custom-select" id="selectQuestNo" disabled>
 										@for (int i = 0; i < 10; i++)
 										{
-											if ((i + questNo_1) == questNo_1)
+											@if (item.QuestionNoStart == (i + questNo_1))
 											{
 												<option value="@(i + questNo_1)" selected>@(i + questNo_1)</option>
-
 											}
 											else
 											{
 												<option value="@(i + questNo_1)">@(i + questNo_1)</option>
-
 											}
+
 										}
 									</select>
 
 									<label for="selectQuestNo2" class="col-form-label mx-3">To</label>
-									<select class="custom-select" id="selectQuestNo2">
+									<select class="custom-select" id="selectQuestNo2" disabled>
 										@for (int i = 0; i < 10; i++)
 										{
-											if ((i + questNo_1) == (questNo_1 + item.MarkSchemes.Count - 1))
+											@if (item.QuestionNoEnd == (i + questNo_1))
 											{
 												<option value="@(i + questNo_1)" selected>@(i + questNo_1)</option>
-												flag = questNo_1 + item.MarkSchemes.Count;
-
 											}
 											else
 											{
@@ -134,7 +129,7 @@
 
 								<div class="form-group col-8">
 									<label for="selectQuestNo" class="col-form-label  mx-3">Question Type</label>
-									<select class="custom-select col-8" id="selectQuestType">
+									<select class="custom-select col-8" id="selectQuestType" disabled>
 
 										@*Create string array to store diplay option *@
 
@@ -142,11 +137,11 @@
 										{
 											@if (item.TaskType == (i + 1))
 											{
-												<option value="@(i+1)" selected>@optionArr[i]</option>
+												<option value="@(i + 1)" selected>@optionArr[i]</option>
 											}
 											else
 											{
-												<option value="@(i+1)">@optionArr[i]</option>
+												<option value="@(i + 1)">@optionArr[i]</option>
 											}
 										}
 
@@ -156,20 +151,21 @@
 
 							<div class="form-group mx-5 my-3 col-10">
 								<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
-								<textarea name="content" id="editor">
+								<textarea name="content" class="editor" disabled>
 								&lt;p&gt;This is some sample content.&lt;/p&gt;
-							</textarea>
+								</textarea>
 							</div>
 
 							<div class="mx-5 my-3 col-10">
 								<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
 
-								@for (int i = 1; i <= 5; i++)
+
+								@foreach (var mkItem in item.MarkSchemes.ToList())
 								{
 									<div class="form-group row">
-										<label class="col-form-label col-1 text-right">@i. </label>
+										<label class="col-form-label col-1 text-right">@mkItem.Index.</label>
 										<div class="col-6">
-											<input class="form-control " value="" />
+											<input class="form-control " value="@mkItem.Answer" disabled/>
 										</div>
 									</div>
 								}
@@ -179,8 +175,9 @@
 						</form>
 					</div>
 					<div class="card-footer text-muted text-right">
-						<a href="#" class="btn btn-primary">Save</a>
-						<a href="#" class="btn btn-secondary">Cancel</a>
+						@* To-do Post to QustionGroup Edit and Delete Controller*@
+						<a href="#" class="btn btn-primary">Edit</a>
+						<a href="#" class="btn btn-danger">Remove</a>
 					</div>
 				</div>
 			}
@@ -188,7 +185,6 @@
 	}
 
 	<hr />
-
 	<div class="nav justify-content-center">
 		<a asp-controller="QuestionGroups" asp-action="Create" asp-route-recordingId="@Model.RecordingId"
 		   class="btn btn-lg btn-secondary">
@@ -199,117 +195,75 @@
 
 <hr />
 
-
-
-<table class="table">
-	<tbody>
-		@{
-			var QuestionModel = Model.QuestionGroups;
-			if (QuestionModel != null)
-			{
-				foreach (var item in QuestionModel.ToList())
-				{
-					<tr>
-						<td>
-							@Html.DisplayFor(modelItem => item.QuestionGroupId)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.TaskType)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.QuestionGroupURL)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.Recording.RecordingId)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.MarkSchemes.Count)
-						</td>
-						<td>
-							<a asp-controller="QuestionGroups" asp-action="Edit" asp-route-id="@item.QuestionGroupId">
-								Edit
-							</a> |
-							<a asp-controller="QuestionGroups" asp-action="Details" asp-route-id="@item.QuestionGroupId">
-								Details
-							</a> |
-							<a asp-controller="QuestionGroups" asp-action="Delete" asp-route-id="@item.QuestionGroupId">
-								Delete
-							</a>
-						</td>
-					</tr>
-				}
-			}
-
-		}
-	</tbody>
-</table>
-
-
 <div>
-	<a asp-action="Edit" asp-route-id="@Model.RecordingId">Edit</a> |
-	<a asp-action="Index" asp-route-part=1>Back to List</a>
+	<a asp-action="Index" asp-route-part=1 class="btn btn-outline-primary">Back to List</a>
 </div>
 
 
 @section Scripts {
 	<script src="~/lib/ckeditor5/build/ckeditor.js"></script>
 	<script>
-		ClassicEditor
-			.create(document.querySelector('#editor'), {
 
-				toolbar: {
-					items: [
-						'undo',
-						'redo',
-						'|',
-						'heading',
-						'|',
-						'fontFamily',
-						'fontSize',
-						'|',
-						'bold',
-						'italic',
-						'underline',
-						'code',
-						'horizontalLine',
-						'bulletedList',
-						'numberedList',
-						'|',
-						'indent',
-						'outdent',
-						'|',
-						'imageUpload',
-						'blockQuote',
-						'insertTable'
-					]
-				},
-				language: 'en',
-				image: {
-					toolbar: [
-						'imageTextAlternative',
-						'imageStyle:full',
-						'imageStyle:side'
-					]
-				},
-				table: {
-					contentToolbar: [
-						'tableColumn',
-						'tableRow',
-						'mergeTableCells',
-						'tableCellProperties',
-						'tableProperties'
-					]
-				},
-				licenseKey: '',
-			})
-			.then(editor => {
-				window.editor = editor;
-			})
-			.catch(error => {
-				console.error('Oops, something gone wrong!');
-				console.error('Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id and the error stack trace:');
-				console.warn('Build id: 571780nchaof-wu4owlwikxxz');
-				console.error(error);
-			});
+		$('.editor').each(function (i, textarea) {
+			ClassicEditor
+				.create(textarea, {
+					toolbar: {
+						items: [
+							'undo',
+							'redo',
+							'|',
+							'heading',
+							'|',
+							'fontFamily',
+							'fontSize',
+							'|',
+							'bold',
+							'italic',
+							'underline',
+							'code',
+							'horizontalLine',
+							'bulletedList',
+							'numberedList',
+							'|',
+							'indent',
+							'outdent',
+							'|',
+							'imageUpload',
+							'blockQuote',
+							'insertTable'
+						]
+					},
+					language: 'en',
+					image: {
+						toolbar: [
+							'imageTextAlternative',
+							'imageStyle:full',
+							'imageStyle:side'
+						]
+					},
+					table: {
+						contentToolbar: [
+							'tableColumn',
+							'tableRow',
+							'mergeTableCells',
+							'tableCellProperties',
+							'tableProperties'
+						]
+					},
+					licenseKey: '',
+					isReadOnly: true,
+				})
+				.then(editor => {
+					editor.isReadOnly = true;
+					window.editor = editor;
+				})
+				.catch(error => {
+					console.error('Oops, something gone wrong!');
+					console.error('Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id and the error stack trace:');
+					console.warn('Build id: 571780nchaof-wu4owlwikxxz');
+					console.error(error);
+				});
+		});
+		
 	</script>
 }
