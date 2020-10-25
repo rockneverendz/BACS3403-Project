@@ -18,6 +18,8 @@ namespace BACS3403_Project.Models
         */
 
         public int QuestionGroupId { get; set; }
+        public int QuestionNoStart { get; set; }
+        public int QuestionNoEnd { get; set; }
         public int TaskType { get; set; }
         public string QuestionGroupURL { get; set; }
         public int RecordingID { get; set; }
