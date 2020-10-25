@@ -1,39 +1,205 @@
 ﻿@model BACS3403_Project.Models.QuestionGroup
 
 @{
-    ViewData["Title"] = "Create";
+	ViewData["Title"] = "Create";
+
+	string[] optionArr = { "Multiple choice", "Matching", "Plan, map, diagram labelling", "Form, note, table, flow-chart, summary completion", "Sentence completion", "Short-answer questions" };
+
+		@*
+			int questNo_1;
+
+			switch (Model.Part)
+			{
+				case 1:
+					questNo_1 = 1;
+					break;
+				case 2:
+					questNo_1 = 11;
+					break;
+				case 3:
+					questNo_1 = 21;
+					break;
+				case 4:
+					questNo_1 = 31;
+					break;
+				default:
+					questNo_1 = 0;
+					break;
+			}
+		*@
 }
 
-<h1>Create</h1>
+<h3>Add New Question Group</h3>
+<h4>Recording ID: @Context.Request.Query["recordingId"]</h4>
 
-<h4>QuestionGroup</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TaskType" class="control-label"></label>
-                <input asp-for="TaskType" class="form-control" />
-                <span asp-validation-for="TaskType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="QuestionGroupURL" class="control-label"></label>
-                <input asp-for="QuestionGroupURL" class="form-control" />
-                <span asp-validation-for="QuestionGroupURL" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="RecordingID" value="@ViewData["RecordingID"]"/>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+<div class="card justify-content-center">
+	<div class="card-body">
+		<form action="" method="post">
+			<div class="form-inline">
+				<div class="form-group col-4">
+
+					<label for="selectQuestNo" class="col-form-label  mx-3">Questions:</label>
+					<select class="custom-select" id="selectQuestNo">
+						<option value="" selected>no.</option>
+						@for (int i = 1; i <= 10; i++)
+						{
+							<option value="@(i)">@(i)</option>
+						}
+					</select>
+
+					<label for="selectQuestNo2" class="col-form-label mx-3">To</label>
+					<select class="custom-select" id="selectQuestNo2">
+						<option value="" selected>no.</option>
+						@for (int i = 0; i < 10; i++)
+						{
+							<option value="@(i)">@(i)</option>
+
+						}
+					</select>
+				</div>
+
+				<div class="form-group col-8">
+					<label for="selectQuestNo" class="col-form-label  mx-3">Question Type</label>
+					<select class="custom-select col-8" id="selectQuestType">
+
+						@*Create string array to store diplay option *@
+						<option value="" selected>choose...</option>
+						@for (int i = 0; i < 6; i++)
+						{
+							<option value="@(i + 1)">@optionArr[i]</option>
+						}
+
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group mx-5 my-3 col-10">
+				<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
+				<textarea name="content" class="editor" disabled>
+								&lt;p&gt;This is some sample content.&lt;/p&gt;
+								</textarea>
+			</div>
+
+			<div class="mx-5 my-3 col-10">
+				<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
+				<div class="form-group row">
+					<label class="col-form-label col-1 text-right">1.</label>
+					<div class="col-6">
+						<input class="form-control " value="" disabled />
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<div class="card-footer text-muted text-right">
+		@* To-do Post to QustionGroup Edit and Delete Controller*@
+		<a href="#" class="btn btn-primary">Edit</a>
+		<a href="#" class="btn btn-danger">Remove</a>
+	</div>
 </div>
 
+
+<hr />
+
+
+
+@*<div class="row">
+		<div class="col-md-4">
+			<form asp-action="Create">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div class="form-group">
+					<label asp-for="TaskType" class="control-label"></label>
+					<input asp-for="TaskType" class="form-control" />
+					<span asp-validation-for="TaskType" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="QuestionGroupURL" class="control-label"></label>
+					<input asp-for="QuestionGroupURL" class="form-control" />
+					<span asp-validation-for="QuestionGroupURL" class="text-danger"></span>
+				</div>
+				<input type="hidden" asp-for="RecordingID" value="@ViewData["RecordingID"]" />
+				<div class="form-group">
+					<input type="submit" value="Create" class="btn btn-primary" />
+				</div>
+			</form>
+		</div>
+	</div>*@
+
 <div>
-    <a asp-action="Index">Back to List</a>
+	<a asp-controller="Recordings" asp-action="Details" asp-route-Id="@Context.Request.Query["recordingId"]">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+	<script src="~/lib/ckeditor5/build/ckeditor.js"></script>
+	<script>
+
+		$('.editor').each(function (i, textarea) {
+			ClassicEditor
+				.create(textarea, {
+					toolbar: {
+						items: [
+							'undo',
+							'redo',
+							'|',
+							'heading',
+							'|',
+							'fontFamily',
+							'fontSize',
+							'|',
+							'bold',
+							'italic',
+							'underline',
+							'code',
+							'horizontalLine',
+							'bulletedList',
+							'numberedList',
+							'|',
+							'indent',
+							'outdent',
+							'|',
+							'imageUpload',
+							'blockQuote',
+							'insertTable'
+						]
+					},
+					language: 'en',
+					image: {
+						toolbar: [
+							'imageTextAlternative',
+							'imageStyle:full',
+							'imageStyle:side'
+						]
+					},
+					table: {
+						contentToolbar: [
+							'tableColumn',
+							'tableRow',
+							'mergeTableCells',
+							'tableCellProperties',
+							'tableProperties'
+						]
+					},
+					licenseKey: '',
+					isReadOnly: true,
+				})
+				.then(editor => {
+					window.editor = editor;
+				})
+				.catch(error => {
+					console.error('Oops, something gone wrong!');
+					console.error('Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id and the error stack trace:');
+					console.warn('Build id: 571780nchaof-wu4owlwikxxz');
+					console.error(error);
+				});
+		});
+
+	</script>
+
+
+
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
