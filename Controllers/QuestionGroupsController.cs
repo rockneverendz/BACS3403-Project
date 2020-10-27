@@ -42,6 +42,7 @@ namespace BACS3403_Project.Controllers
         }
 
         // GET: QuestionGroups/Create
+        
         public IActionResult Create(int? recordingId)
         {
             ViewData["RecordingID"] = recordingId;
@@ -53,7 +54,7 @@ namespace BACS3403_Project.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuestionGroupId,TaskType,QuestionGroupURL,RecordingID")] QuestionGroup questionGroup)
+        public async Task<IActionResult> Create([Bind("QuestionGroupId,TaskType,QuestionGroupURL,RecordingID,QuestionNoEnd,QuestionNoStart")] QuestionGroup questionGroup)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +63,8 @@ namespace BACS3403_Project.Controllers
 
                 _context.Add(questionGroup);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                                                                    /*Need Revieew HERE*/
+                return RedirectToAction("Details", "Recordings", new { id = questionGroup.RecordingID });
             }
             return View(questionGroup);
         }

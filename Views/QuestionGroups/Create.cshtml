@@ -5,64 +5,70 @@
 
 	string[] optionArr = { "Multiple choice", "Matching", "Plan, map, diagram labelling", "Form, note, table, flow-chart, summary completion", "Sentence completion", "Short-answer questions" };
 
-		@*
-			int questNo_1;
+	MarkScheme[] markScheme = new MarkScheme[4];
 
-			switch (Model.Part)
-			{
-				case 1:
-					questNo_1 = 1;
-					break;
-				case 2:
-					questNo_1 = 11;
-					break;
-				case 3:
-					questNo_1 = 21;
-					break;
-				case 4:
-					questNo_1 = 31;
-					break;
-				default:
-					questNo_1 = 0;
-					break;
-			}
-		*@
+	int lastQuestGrpNo = int.Parse(Context.Request.Query["lastQuestNo"]);
+	int qPart = int.Parse(Context.Request.Query["recordingPart"]);
+
+	int questNoEnd;
+
+	switch (qPart)
+	{
+		case 1:
+			questNoEnd = 10;
+			break;
+		case 2:
+			questNoEnd = 20;
+			break;
+		case 3:
+			questNoEnd = 30;
+			break;
+		case 4:
+			questNoEnd = 40;
+			break;
+		default:
+			questNoEnd = 0;
+			break;
+	}
+
 }
 
 <h3>Add New Question Group</h3>
-<h4>Recording ID: @Context.Request.Query["recordingId"]</h4>
+<h4>Recording ID: @ViewData["RecordingID"]</h4>
 
 <hr />
 
 <div class="card justify-content-center">
 	<div class="card-body">
 		<form action="" method="post">
-			<div class="form-inline">
+			<div class="row form-inline">
 				<div class="form-group col-4">
 
 					<label for="selectQuestNo" class="col-form-label  mx-3">Questions:</label>
-					<select class="custom-select" id="selectQuestNo">
-						<option value="" selected>no.</option>
-						@for (int i = 1; i <= 10; i++)
+					<input type="hidden" asp-for="QuestionNoStart" value="@(lastQuestGrpNo == 1 ? lastQuestGrpNo:  lastQuestGrpNo + 1)" />
+					<select  class="custom-select" id="selectQuestNo">
+						@for (int i = (lastQuestGrpNo == 1 ? lastQuestGrpNo : lastQuestGrpNo + 1) ; i <= questNoEnd; i++)
 						{
-							<option value="@(i)">@(i)</option>
+							@if ( i == (lastQuestGrpNo == 1 ? lastQuestGrpNo : lastQuestGrpNo + 1))
+							{
+								<option value="@i" selected>@i</option>
+							}
 						}
 					</select>
 
 					<label for="selectQuestNo2" class="col-form-label mx-3">To</label>
-					<select class="custom-select" id="selectQuestNo2">
-						<option value="" selected>no.</option>
-						@for (int i = 0; i < 10; i++)
+					<select asp-for="QuestionNoEnd" class="custom-select" id="selectQuestNo2" required>
+						@for (int i = (lastQuestGrpNo == 1 ? lastQuestGrpNo + 1 : lastQuestGrpNo + 2); i <= questNoEnd; i++)
 						{
-							<option value="@(i)">@(i)</option>
-
+							<option value="@i">@i</option>
 						}
 					</select>
+					<span asp-validation-for="QuestionNoEnd" class="text-danger col-8"></span>
 				</div>
 
 				<div class="form-group col-8">
 					<label for="selectQuestNo" class="col-form-label  mx-3">Question Type</label>
-					<select class="custom-select col-8" id="selectQuestType">
+					<select asp-for="TaskType" class="custom-select col-8" id="selectQuestType" required>
 
 						@*Create string array to store diplay option *@
 						<option value="" selected>choose...</option>
@@ -70,35 +76,42 @@
 						{
 							<option value="@(i + 1)">@optionArr[i]</option>
 						}
-
 					</select>
+					<span asp-validation-for="TaskType" class="text-danger col-4"></span>
 				</div>
 			</div>
 
 			<div class="form-group mx-5 my-3 col-10">
 				<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
-				<textarea name="content" class="editor" disabled>
-								&lt;p&gt;This is some sample content.&lt;/p&gt;
-								</textarea>
+				<textarea asp-for="QuestionGroupURL" class="editor">
+								&lt;p&gt;This is some sample content. Question URL&lt;/p&gt;
+				</textarea>
 			</div>
-
-			<div class="mx-5 my-3 col-10">
-				<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
-				<div class="form-group row">
-					<label class="col-form-label col-1 text-right">1.</label>
-					<div class="col-6">
-						<input class="form-control " value="" disabled />
-					</div>
+			<div class="col-12">
+				<input type="hidden" asp-for="RecordingID" value="@ViewData["RecordingID"]" />
+				<div class="form-group float-right">
+					<input type="submit" value="Create" class="btn btn-primary" />
 				</div>
 			</div>
 
 		</form>
 	</div>
-	<div class="card-footer text-muted text-right">
-		@* To-do Post to QustionGroup Edit and Delete Controller*@
-		<a href="#" class="btn btn-primary">Edit</a>
-		<a href="#" class="btn btn-danger">Remove</a>
+	<hr />
+	<div class="card-body">
+		<div class="mx-5 col-10">
+			<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
+			<div class="form-group row">
+				<label class="col-form-label col-1 text-right">1.</label>
+				<div class="col-6">
+					@foreach (var item in markScheme)
+					{
+						<input class="form-control " value="" disabled />
+					}
+				</div>
+			</div>
+		</div>
 	</div>
+
 </div>
 
 
@@ -140,6 +153,9 @@
 		$('.editor').each(function (i, textarea) {
 			ClassicEditor
 				.create(textarea, {
+					plugin: [
+						Base64UploadAdapter
+					],
 					toolbar: {
 						items: [
 							'undo',
