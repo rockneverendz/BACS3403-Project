@@ -61,9 +61,56 @@ namespace BACS3403_Project.Controllers
                 // Check if user is authorized to create recording
                 if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();
 
+
+                /* Find the Recording on based on QuestionGroup -> Recording ID*/
+                var recording = await _context.Recordings
+                                .FirstOrDefaultAsync(m => m.RecordingId == questionGroup.RecordingID);
+
+                string filePath = "not found";
+                string fileName = "";
+
+                /* Save the textarea content b4 update the filePath */
+                string content = questionGroup.QuestionGroupURL;
+                questionGroup.QuestionGroupURL = "";
+
+                switch (recording.Part)
+                {
+                    case 1:
+                        filePath = "Storage\\QuestionsText\\Part1\\";
+                        break;
+                    case 2:
+                        filePath = "Storage\\QuestionsText\\Part2\\";
+                        break;
+                    case 3:
+                        filePath = "Storage\\QuestionsText\\Part3\\";
+                        break;
+                    case 4:
+                        filePath = "Storage\\QuestionsText\\Part4\\";
+                        break;
+                    default:
+                        break;
+                }
+
+                /* Append File Name with QuestionGrp Details */
+                fileName = Guid.NewGuid().ToString() + "_" + 
+                                recording.RecordingId + "_" +
+                                recording.Part + "_" +
+                                questionGroup.QuestionNoStart + "_To_" +
+                                questionGroup.QuestionNoEnd + 
+                                ".txt";
+
+                /* Combine File Path and File Name */
+                filePath += fileName;
+
+                /* Write content to file */
+                System.IO.File.WriteAllText(filePath, content);
+
+                /* Update Question Group URL */
+                questionGroup.QuestionGroupURL = filePath;
+
                 _context.Add(questionGroup);
                 await _context.SaveChangesAsync();
-                                                                    /*Need Revieew HERE*/
+                                                                    
                 return RedirectToAction("Details", "Recordings", new { id = questionGroup.RecordingID });
             }
             return View(questionGroup);

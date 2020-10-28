@@ -160,16 +160,17 @@
 
 								<div class="form-group mx-5 my-3 col-10">
 									<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
-									<textarea name="content" class="editor">
-								&lt;p&gt;This is some sample content.&lt;/p&gt;
-								</textarea>
+									@{ 
+										string content = System.IO.File.ReadAllText(item.QuestionGroupURL);
+									}
+									<textarea name="content" class="editor">@content</textarea>
 								</div>
 
 								<div class="mx-5 my-3 col-10">
 									<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
 
 									@foreach (var mkItem in item.MarkSchemes.ToList())
-									{
+											{
 										<div class="form-group row">
 											<label class="col-form-label col-1 text-right">@mkItem.Index.</label>
 											<div class="col-6">
@@ -221,9 +222,6 @@
 		$('.editor').each(function (i, textarea) {
 			ClassicEditor
 				.create(textarea, {
-					plugin: [
-						Base64UploadAdapter
-					],
 					toolbar: {
 						items: [
 							'undo',
