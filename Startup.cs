@@ -38,6 +38,9 @@ namespace BACS3403_Project
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            // Using Newtonsoft.Json
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
