@@ -36,5 +36,8 @@
   },
   "scripts": {
     "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-export-pdf": "^23.0.0"
   }
 }
