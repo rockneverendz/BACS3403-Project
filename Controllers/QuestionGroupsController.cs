@@ -110,8 +110,23 @@ namespace BACS3403_Project.Controllers
 
                 _context.Add(questionGroup);
                 await _context.SaveChangesAsync();
-                                                                    
-                return RedirectToAction("Details", "Recordings", new { id = questionGroup.RecordingID });
+
+
+
+                /*Query the recently added questiongroup and save as ViewData*/
+                var addedQuestionGroup = _context.Questions
+                                .Include(q => q.Recording)
+                                .OrderByDescending(x => x.QuestionGroupId)
+                                .FirstOrDefault();
+
+                Console.WriteLine(addedQuestionGroup.QuestionGroupId);
+
+
+                /* Then redirect to create CreateMarkScheme*/
+
+                return RedirectToAction("CreateMarkScheme", "QuestionGroups", addedQuestionGroup);
+
+                //return RedirectToAction("Details", "Recordings", new { id = questionGroup.RecordingID });
             }
             return View(questionGroup);
         }
@@ -220,5 +235,15 @@ namespace BACS3403_Project.Controllers
             Recording recording = _context.Recordings.FirstOrDefault(r => r.RecordingId == RecordingID);
             return recording.ExaminerID == _userManager.GetUserId(User);
         }
+
+        // GET: QuestionGroups/CreateMarkScheme
+
+        public IActionResult CreateMarkScheme(int? id)
+        {
+            
+            return View();
+        }
+
+
     }
 }
