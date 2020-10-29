@@ -94,10 +94,8 @@
 
 			if (QuestionModel != null)
 			{
-
 				foreach (var item in QuestionModel.ToList())
 				{
-
 					<div class="card justify-content-center">
 						<div class="card-body">
 							<form action="" method="post">
@@ -161,7 +159,17 @@
 								<div class="form-group mx-5 my-3 col-10">
 									<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
 									@{ 
-										string content = System.IO.File.ReadAllText(item.QuestionGroupURL);
+										string content;
+
+										try
+										{
+											content = System.IO.File.ReadAllText(item.QuestionGroupURL);
+										}
+										catch (Exception e)
+										{
+											content = "";
+											Console.WriteLine(e);
+										}
 									}
 									<textarea name="content" class="editor">@content</textarea>
 								</div>
@@ -205,6 +213,7 @@
 				</a>
 			</div>
 		}
+
 
 	</div>
 
