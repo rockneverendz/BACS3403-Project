@@ -111,20 +111,13 @@ namespace BACS3403_Project.Controllers
                 _context.Add(questionGroup);
                 await _context.SaveChangesAsync();
 
-
-
                 /*Query the recently added questiongroup and save as ViewData*/
                 var addedQuestionGroup = _context.Questions
-                                .Include(q => q.Recording)
                                 .OrderByDescending(x => x.QuestionGroupId)
                                 .FirstOrDefault();
 
-                Console.WriteLine(addedQuestionGroup.QuestionGroupId);
-
-
                 /* Then redirect to create CreateMarkScheme*/
-
-                return RedirectToAction("CreateMarkScheme", "QuestionGroups", addedQuestionGroup);
+                return RedirectToAction("CreateMarkScheme", "QuestionGroups", new { id = addedQuestionGroup.QuestionGroupId } );
 
                 //return RedirectToAction("Details", "Recordings", new { id = questionGroup.RecordingID });
             }
@@ -238,11 +231,87 @@ namespace BACS3403_Project.Controllers
 
         // GET: QuestionGroups/CreateMarkScheme
 
-        public IActionResult CreateMarkScheme(int? id)
+        public async Task<IActionResult> CreateMarkScheme(int? id)
         {
-            
-            return View();
+            /* Find Question Group and Set to ViewData*/          
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var questionGroup = _context.Questions.Find(id);
+            if (questionGroup == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["QuestionGroup"] = questionGroup;
+
+            /* Add the MarkScheme */
+            var msList = new List<MarkScheme>();
+
+			for (int i = questionGroup.QuestionNoStart; i <= questionGroup.QuestionNoEnd; i++)
+			{
+				var ms = new MarkScheme
+				{
+					Index = i,
+					Answer = "",
+					QuestionGroupID = questionGroup.QuestionGroupId
+				};
+				msList.Add(ms);
+
+                _context.Add(ms);
+                await _context.SaveChangesAsync();
+            }
+
+            var markScheme = await _context.MarkSchemes
+                                .Where(m => m.QuestionGroupID == questionGroup.QuestionGroupId)
+                                .ToListAsync();
+
+            return View(markScheme);
         }
+
+
+        // POST: QuestionGroups/CreateMarkScheme
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMarkScheme(List<MarkScheme> markScheme)
+		{
+            /* Working codes*/
+            if (ModelState.IsValid)
+			{
+                if( markScheme != null)
+				{
+					foreach (var item in markScheme)
+					{
+                        var record = _context.MarkSchemes.Find(item.MarkSchemeID);
+                        if (record != null)
+                        {
+                            record.Answer = item.Answer;
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+				}
+            }
+
+
+            /*Reverse serach back question group to return the view*/
+            var addedMarkScheme = await _context.MarkSchemes
+                .OrderByDescending(x => x.MarkSchemeID)
+                .FirstOrDefaultAsync();
+
+            var reverseFindQuestionGrp = await _context.Questions
+                .FirstOrDefaultAsync(q => q.QuestionGroupId == addedMarkScheme.QuestionGroupID);
+
+            return RedirectToAction("Details", "Recordings", new { id = reverseFindQuestionGrp.RecordingID });
+            /*return View(markScheme);*/
+        }
+
+
+        /*[HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("QuestionGroupId,TaskType,QuestionGroupURL,RecordingID,QuestionNoEnd,QuestionNoStart")] QuestionGroup questionGroup)*/
 
 
     }

@@ -1,8 +1,167 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<BACS3403_Project.Models.MarkScheme>;
+
 @{
+	ViewData["Title"] = "Create Mark Scheme ";
+
+	string[] optionArr = { "Multiple choice", "Matching", "Plan, map, diagram labelling", "Form, note, table, flow-chart, summary completion", "Sentence completion", "Short-answer questions" };
+
+	var questionGrp = ViewData["QuestionGroup"] as QuestionGroup;
+
 }
 
+<h3>Add New Question Group</h3>
+<h4>Recording ID: @ViewData["RecordingID"]</h4>
 
-	<h1>HIIII</h1>
+<div class="card justify-content-center">
+	<div class="card-body">
+		<div class="row form-inline">
+			<div class="form-group col-4">
+
+				<label for="selectQuestNo" class="col-form-label  mx-3">Questions:</label>
+				<input type="hidden" value="" />
+				<select class="custom-select" id="selectQuestNo" disabled>
+					<option value="" selected>@questionGrp.QuestionNoStart</option>
+				</select>
+
+				<label for="selectQuestNo2" class="col-form-label mx-3">To</label>
+				<select class="custom-select" id="selectQuestNo2" disabled>
+					<option value="" selected>@questionGrp.QuestionNoEnd</option>
+				</select>
+			</div>
+
+			<div class="form-group col-8">
+				<label for="selectQuestNo" class="col-form-label  mx-3">Question Type</label>
+				<select class="custom-select col-8" id="selectQuestType" disabled>
+					@*Create string array to store diplay option *@
+					@for (int i = 0; i < 6; i++)
+					{
+						if (questionGrp.TaskType == i)
+						{
+							<option value="@(i + 1)" selected>@optionArr[i]</option>
+						}
+						else
+						{
+							<option value="@(i + 1)">@optionArr[i]</option>
+						}
+
+					}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group mx-5 my-3 col-10">
+			<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
+			@{
+				string content;
+
+				try
+				{
+					content = System.IO.File.ReadAllText(questionGrp.QuestionGroupURL);
+				}
+				catch (Exception e)
+				{
+					content = "";
+					Console.WriteLine(e);
+				}
+			}
+
+			<textarea id="editor" placeholder="Type the content here!">
+				@content
+			</textarea>
+		</div>
+	</div>
+	<hr />
+	<div class="card-body">
+		<div class="mx-5 col-10">
+			<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
+			<form method="post" asp-action="CreateMarkScheme">
+				@for (int i = 0; i < Model.Count; i++)
+				{
+					<div class="form-group row">
+						@*Loop through the mark scheme list*@
+						@Html.HiddenFor(x => Model[i].MarkSchemeID)
+						<label class="col-form-label col-1 text-right">@Model[i].Index</label>
+						<div class="col-6">
+							@Html.TextBoxFor(x => Model[i].Answer, new { @class = "form-control" })
+						</div>
+					</div>
+				}
+				<div class="form-group float-right">
+					<input type="submit" value="Create" class="btn btn-primary" />
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+
+@section Scripts{
+	<script src="~/lib/ckeditor5/build/ckeditor.js"></script>
+	<script>
+
+		ClassicEditor
+			.create(document.querySelector('#editor'), {
+				toolbar: {
+					items: [
+						'undo',
+						'redo',
+						'|',
+						'heading',
+						'|',
+						'fontFamily',
+						'fontSize',
+						'|',
+						'bold',
+						'italic',
+						'underline',
+						'code',
+						'horizontalLine',
+						'bulletedList',
+						'numberedList',
+						'|',
+						'indent',
+						'outdent',
+						'|',
+						'imageUpload',
+						'blockQuote',
+						'insertTable'
+					]
+				},
+				language: 'en',
+				image: {
+					toolbar: [
+						'imageTextAlternative',
+						'imageStyle:full',
+						'imageStyle:side'
+					]
+				},
+				table: {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells',
+						'tableCellProperties',
+						'tableProperties'
+					]
+				},
+				licenseKey: '',
+				isReadOnly: true,
+			})
+			.then(editor => {
+				editor.isReadOnly = true;
+				window.editor = editor;
+			})
+			.catch(error => {
+				console.error('Oops, something gone wrong!');
+				console.error('Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id andthe error stack trace:');
+				console.warn('Build id: 571780nchaof-wu4owlwikxxz');
+				console.error(error);
+			});
+
+
+	</script>
+
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}
