@@ -194,8 +194,6 @@ namespace BACS3403_Project.Controllers.Question
             var recording = await _context.Recordings.FindAsync(id);
             _context.Recordings.Remove(recording);
 
-
-
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
