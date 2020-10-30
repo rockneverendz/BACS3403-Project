@@ -9,7 +9,6 @@ namespace BACS3403_Project.Models
 
         // Only accessible for examiners
         public string Answer { get; set; }
-        public string Option { get; set; }
         public int QuestionGroupID { get; set; }
         public QuestionGroup QuestionGroup { get; set; }
     }
