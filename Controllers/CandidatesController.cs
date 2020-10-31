@@ -38,9 +38,7 @@ namespace BACS3403_Project.Controllers
         [HttpGet("RedeemToken")]
         public async Task<ActionResult<Candidate>> RedeemToken(string token)
         {
-            var candidate = await _context.Candidates
-                .Include(candidate => candidate.Test)
-                .FirstOrDefaultAsync(candidate => candidate.Token == token);
+            Candidate candidate = await GetCandidateByToken(token);
 
             if (candidate == null)
             {
@@ -52,18 +50,63 @@ namespace BACS3403_Project.Controllers
 
         // GET: api/Candidates/VerifyCandidate
         [HttpPost("VerifyCandidate")]
-        public async Task<ActionResult<Candidate>> VerifyCandidate([FromForm] CandidateFaceModel candidate)
+        public async Task<ActionResult<Candidate>> VerifyCandidate([FromForm] CandidateFaceModel candidateFaceModel)
         {
+            var token = candidateFaceModel.Token;
+            var recentPicture = candidateFaceModel.Face;
 
-            var face1 = await UploadAndDetectFace("D:\\Repository\\BACS3403-Project\\wwwroot\\resource\\Obama\\Obama 1.jpg");
-            var face2 = await UploadAndDetectFace("D:\\Repository\\BACS3403-Project\\wwwroot\\resource\\Obama\\Obama 2.jpg");
+            Candidate candidate = await GetCandidateByToken(token);
+
+            if (candidate == null)
+                return NotFound();
+
+            string recentPicturePath = SaveRecentPicture(token, recentPicture);
+
+            var face1 = await UploadAndDetectFace(candidate.IdentificationCard);
+            var face2 = await UploadAndDetectFace(recentPicturePath);
 
             var result = await _faceClient.Face.VerifyFaceToFaceAsync((Guid)face1.FaceId, (Guid)face2.FaceId);
 
             if (result.IsIdentical)
+            {
+                // Delete old picture if exsits
+                if (candidate.RecentPicture != null) System.IO.File.Delete(candidate.RecentPicture);
+                candidate.RecentPicture = recentPicturePath;
+                candidate.Status = "Verified";
+                _context.SaveChanges();
                 return Ok();
+            }
             else
-                return Unauthorized();
+            {
+                System.IO.File.Delete(recentPicturePath);
+                return Unauthorized(); 
+            }
+        }
+
+        private async Task<Candidate> GetCandidateByToken(string Token)
+        {
+            return await _context.Candidates
+                            .Include(candidate => candidate.Test)
+                            .FirstOrDefaultAsync(candidate => candidate.Token == Token);
+        }
+
+        private static string SaveRecentPicture(string Token, IFormFile recentPicture)
+        {
+            // Create a path
+            string filePart = "Storage\\Candidate\\" + Token + "\\";
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + recentPicture.FileName;
+            string path = Path.Combine(filePart, uniqueFileName);
+
+            // Create a directory if it doesn't exsits
+            Directory.CreateDirectory(filePart);
+
+            // Save to storage
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                recentPicture.CopyTo(stream);
+            }
+
+            return path;
         }
 
         // PUT: api/Candidates/5
