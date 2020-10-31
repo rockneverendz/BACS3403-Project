@@ -1,12 +1,16 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
+using Microsoft.Azure.CognitiveServices.Vision.Face;
 using BACS3403_Project.Data;
 using BACS3403_Project.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace BACS3403_Project.Controllers
 {
@@ -15,24 +19,28 @@ namespace BACS3403_Project.Controllers
     public class CandidatesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFaceClient _faceClient;
 
-        public CandidatesController(ApplicationDbContext context)
+        public CandidatesController(ApplicationDbContext context, IConfiguration configuration)
         {
+            string key = configuration["Face:SubscriptionKey"];
+            string endpoint = configuration["Face:Endpoint"];
+
             _context = context;
+            _faceClient = new FaceClient(
+                new ApiKeyServiceClientCredentials(key),
+                new System.Net.Http.DelegatingHandler[] { }
+            );
+            _faceClient.Endpoint = endpoint;
         }
 
-        // GET: api/Candidates
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Candidate>>> GetCandidates()
+        // GET: api/Candidates/RedeemToken
+        [HttpGet("RedeemToken")]
+        public async Task<ActionResult<Candidate>> RedeemToken(string token)
         {
-            return await _context.Candidates.ToListAsync();
-        }
-
-        // GET: api/Candidates/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Candidate>> GetCandidate(int id)
-        {
-            var candidate = await _context.Candidates.FindAsync(id);
+            var candidate = await _context.Candidates
+                .Include(candidate => candidate.Test)
+                .FirstOrDefaultAsync(candidate => candidate.Token == token);
 
             if (candidate == null)
             {
@@ -40,6 +48,22 @@ namespace BACS3403_Project.Controllers
             }
 
             return candidate;
+        }
+
+        // GET: api/Candidates/VerifyCandidate
+        [HttpPost("VerifyCandidate")]
+        public async Task<ActionResult<Candidate>> VerifyCandidate([FromForm] CandidateFaceModel candidate)
+        {
+
+            var face1 = await UploadAndDetectFace("D:\\Repository\\BACS3403-Project\\wwwroot\\resource\\Obama\\Obama 1.jpg");
+            var face2 = await UploadAndDetectFace("D:\\Repository\\BACS3403-Project\\wwwroot\\resource\\Obama\\Obama 2.jpg");
+
+            var result = await _faceClient.Face.VerifyFaceToFaceAsync((Guid)face1.FaceId, (Guid)face2.FaceId);
+
+            if (result.IsIdentical)
+                return Ok();
+            else
+                return Unauthorized();
         }
 
         // PUT: api/Candidates/5
@@ -106,5 +130,64 @@ namespace BACS3403_Project.Controllers
         {
             return _context.Candidates.Any(e => e.CandidateID == id);
         }
+
+        // Uploads the image file and calls DetectWithStreamAsync.
+        private async Task<DetectedFace> UploadAndDetectFace(string imageFilePath)
+        {
+            // Call the Face API.
+            try
+            {
+                using (Stream imageFileStream = System.IO.File.OpenRead(imageFilePath))
+                {
+                    // The second argument specifies to return the faceId, while
+                    // the third argument specifies not to return face landmarks.
+                    IList<DetectedFace> face =
+                        await _faceClient.Face.DetectWithStreamAsync(
+                            imageFileStream, true, false);
+
+                    if (face.Count == 1)
+                    {
+                        return face[0];
+                    }
+                    else
+                    {
+                        throw new Exception("Multiple face detected.");
+                    }
+                }
+            }
+            // Catch and display Face API errors.
+            catch (APIErrorException f)
+            {
+                throw f;
+                //MessageBox.Show(f.Message);
+                //return new List<DetectedFace>();
+            }
+            // Catch and display all other errors.
+            catch (Exception e)
+            {
+                throw e;
+                //MessageBox.Show(e.Message, "Error");
+                //return new List<DetectedFace>();
+            }
+        }
+    }
+
+    public class CandidateAPIModel
+    {
+        public int CandidateID { get; set; }
+        public string Name { get; set; }
+        public string Token { get; set; }
+        public int TestID { get; set; }
+        public string Status { get; set; }
+        public string Grade { get; set; }
+
+        public ICollection<RecordingList> RecordingLists { get; set; }
+        public Test Test { get; set; }
+    }
+
+    public class CandidateFaceModel
+    {
+        public string Token { get; set; }
+        public IFormFile Face { get; set; }
     }
 }
