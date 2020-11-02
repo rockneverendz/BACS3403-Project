@@ -41,6 +41,10 @@ namespace BACS3403_Project.Data
                 .HasOne(a => a.RecordingList)
                 .WithMany(rl => rl.Answers)
                 .HasForeignKey(a => new { a.CandidateID, a.RecordingID });
+
+            modelBuilder.Entity<Candidate>()
+                .HasIndex(candidate => candidate.Token)
+                .IsUnique();
         }
     }
 }
