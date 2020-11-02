@@ -3,9 +3,9 @@
 @{
 	ViewData["Title"] = "Create";
 
-	string[] optionArr = { "Multiple choice", "Matching", "Plan, map, diagram labelling", "Form, note, table, flow-chart, summary completion", "Sentence completion", "Short-answer questions" };
+	var recording = ViewData["RecordingModel"] as Recording;
 
-	MarkScheme[] markScheme = new MarkScheme[4];
+	string[] optionArr = { "Multiple choice", "Matching", "Plan, map, diagram labelling", "Form, note, table, flow-chart, summary completion", "Sentence completion", "Short-answer questions" };
 
 	int lastQuestGrpNo = int.Parse(Context.Request.Query["lastQuestNo"]);
 	int qPart = int.Parse(Context.Request.Query["recordingPart"]);
@@ -34,7 +34,7 @@
 }
 
 <h3>Add New Question Group</h3>
-<h4>Recording ID: @ViewData["RecordingID"]</h4>
+<h4>Recording Title: @recording.Title</h4>
 
 <hr />
 
@@ -88,7 +88,7 @@
 				</textarea>
 			</div>
 			<div class="col-12">
-				<input type="hidden" asp-for="RecordingID" value="@ViewData["RecordingID"]" />
+				<input type="hidden" asp-for="RecordingID" value="@recording.RecordingId" />
 				<div class="form-group float-right">
 					<input type="submit" value="Create" class="btn btn-primary" />
 				</div>
@@ -97,21 +97,6 @@
 		</form>
 	</div>
 	<hr />
-@*	<div class="card-body">
-		<div class="mx-5 col-10">
-			<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
-			<div class="form-group row">
-				<label class="col-form-label col-1 text-right">1.</label>
-				<div class="col-6">
-					@foreach (var item in markScheme)
-					{
-						<input class="form-control " value="" disabled />
-					}
-				</div>
-			</div>
-		</div>
-	</div>*@
-
 </div>
 
 
