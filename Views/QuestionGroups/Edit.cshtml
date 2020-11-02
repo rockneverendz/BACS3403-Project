@@ -1,44 +1,193 @@
-﻿@model BACS3403_Project.Models.QuestionGroup
+﻿@model BACS3403_Project.ViewModels.EditQuestionGroupViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Edit Question Group";
+
+	var recording = ViewData["RecordingModel"] as Recording;
+
+	string[] optionArr = { "Multiple choice", "Matching", "Plan, map, diagram labelling", "Form, note, table, flow-chart, summary completion", "Sentence completion", "Short-answer questions" };
+
+
 }
 
-<h1>Edit</h1>
+<h3>Edit Question Group</h3>
+<h4>Recording Title: @recording.Title</h4>
 
-<h4>QuestionGroup</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="QuestionGroupId" />
-            <div class="form-group">
-                <label asp-for="TaskType" class="control-label"></label>
-                <input asp-for="TaskType" class="form-control" />
-                <span asp-validation-for="TaskType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="QuestionGroupURL" class="control-label"></label>
-                <input asp-for="QuestionGroupURL" class="form-control" />
-                <span asp-validation-for="QuestionGroupURL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RecordingID" class="control-label"></label>
-                <select asp-for="RecordingID" class="form-control" asp-items="ViewBag.RecordingID"></select>
-                <span asp-validation-for="RecordingID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
+<div class="card justify-content-center">
+	<form asp-action="Edit" method="post">
+		<div class="card-body">
+			<div class="form-group">
+				<h4>ID: @Model.QuestionGroupId</h4>
+				<input type="hidden" asp-for="RecordingID" value="@recording.RecordingId" />
+				<input type="hidden" asp-for="QuestionGroupId" value="@Model.QuestionGroupId" />
+			</div>
+			<div class="form-inline">
+				<div class="form-group col-4">
+					<label for="selectQuestNo" class="col-form-label  mx-3">Questions:</label>
+					<input type="hidden" asp-for="QuestionNoStart" value="@Model.QuestionNoStart" />
+					<select class="custom-select" id="selectQuestNo" disabled>
+						<option value="@Model.QuestionNoStart" selected>@Model.QuestionNoStart</option>
+					</select>
+
+					<label for="selectQuestNo2" class="col-form-label mx-3">To</label>
+					<input type="hidden" asp-for="QuestionNoEnd" value="@Model.QuestionNoEnd" />
+					<select class="custom-select" id="selectQuestNo2" disabled>
+						<option value="@Model.QuestionNoEnd" selected>@Model.QuestionNoEnd</option>
+					</select>
+				</div>
+
+				<div class="form-group col-8">
+					<label for="selectQuestNo" class="col-form-label  mx-3">Question Type</label>
+					<select asp-for="TaskType" class="custom-select col-8" id="selectQuestType">
+						@*Create string array to store diplay option *@
+						@for (int i = 0; i < 6; i++)
+						{
+							@if (Model.TaskType == (i + 1))
+							{
+								<option value="@(i + 1)" selected>@optionArr[i]</option>
+							}
+							else
+							{
+								<option value="@(i + 1)">@optionArr[i]</option>
+							}
+						}
+
+					</select>
+					@*<input asp-for="TaskType" value="" id="taskType" />*@
+				</div>
+			</div>
+
+			<div class="form-group mx-5 my-3 col-10">
+				<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
+				@{
+					string content;
+
+					try
+					{
+						content = System.IO.File.ReadAllText(Model.QuestionGroupURL);
+					}
+					catch (Exception e)
+					{
+						content = "";
+						Console.WriteLine(e);
+					}
+				}
+				<textarea id="editor" placeholder="Type the content here!"
+						  class="editor" name="questionContent">@content</textarea>
+				<br />
+				<input asp-for="QuestionGroupURL" type="hidden" class="form-control" id="contentToServer" />
+
+			</div>
+
+			<div class="mx-5 my-3 col-10">
+				<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
+
+				@for (int i = 0; i < Model.MarkSchemes.Count(); i++)
+				{
+					<div class="form-group row">
+						@*Loop through the mark scheme list*@
+						@Html.HiddenFor(x => Model.MarkSchemes[i].MarkSchemeID)
+						<label class="col-form-label col-1 text-right">@Model.MarkSchemes[i].Index</label>
+						<div class="col-6">
+							@Html.TextBoxFor(x => Model.MarkSchemes[i].Answer, new { @class = "form-control" })
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+		<div class="card-footer text-muted text-right">
+			<button class="btn btn-primary mr-5" id="getData" type="submit">Save</button>
+		</div>
+	</form>
+</div>
+<hr />
 <div>
-    <a asp-action="Index">Back to List</a>
+	<a asp-controller="Recordings" asp-action="Details" asp-route-id="@Model.RecordingID"
+	   class="btn btn-outline-primary">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+	<script src="~/lib/ckeditor5/build/ckeditor.js"></script>
+	<script>
+		ClassicEditor
+			.create(document.querySelector('#editor'), {
+				toolbar: {
+					items: [
+						'undo',
+						'redo',
+						'|',
+						'heading',
+						'|',
+						'fontFamily',
+						'fontSize',
+						'|',
+						'bold',
+						'italic',
+						'underline',
+						'code',
+						'horizontalLine',
+						'bulletedList',
+						'numberedList',
+						'|',
+						'indent',
+						'outdent',
+						'|',
+						'imageUpload',
+						'blockQuote',
+						'insertTable'
+					]
+				},
+				language: 'en',
+				image: {
+					toolbar: [
+						'imageTextAlternative',
+						'imageStyle:full',
+						'imageStyle:side'
+					]
+				},
+				table: {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells',
+						'tableCellProperties',
+						'tableProperties'
+					]
+				},
+				licenseKey: '',
+				isReadOnly: true,
+			})
+			.then(editor => {
+				window.editor = editor;
+			})
+			.catch(error => {
+				console.error('Oops, something gone wrong!');
+				console.error('Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id andthe error stack trace:');
+				console.warn('Build id: 571780nchaof-wu4owlwikxxz');
+				console.error(error);
+			});
+
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('#getData').hover(function () {
+				const editorData = editor.getData();
+				//console.log(editorData);
+
+				var contentToServer = $('#contentToServer');
+				contentToServer.val(editorData);
+
+			});
+
+			$('#selectQuestType').on('change', function () {
+				$('#taskType').val = $('#selectQuestType').val;
+			});
+
+		});
+	</script>
+
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
