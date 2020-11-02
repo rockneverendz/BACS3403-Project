@@ -52,23 +52,28 @@ namespace BACS3403_Project.Controllers
         [HttpPost("VerifyCandidate")]
         public async Task<ActionResult<Candidate>> VerifyCandidate([FromForm] CandidateFaceModel candidateFaceModel)
         {
-            var token = candidateFaceModel.Token;
-            var recentPicture = candidateFaceModel.Face;
+            string recentPicturePath = null;
 
-            Candidate candidate = await GetCandidateByToken(token);
-
-            if (candidate == null)
-                return NotFound();
-
-            string recentPicturePath = SaveRecentPicture(token, recentPicture);
-
-            var face1 = await UploadAndDetectFace(candidate.IdentificationCard);
-            var face2 = await UploadAndDetectFace(recentPicturePath);
-
-            var result = await _faceClient.Face.VerifyFaceToFaceAsync((Guid)face1.FaceId, (Guid)face2.FaceId);
-
-            if (result.IsIdentical)
+            try
             {
+                var token = candidateFaceModel.Token;
+                var recentPicture = candidateFaceModel.Face;
+
+                Candidate candidate = await GetCandidateByToken(token);
+
+                if (candidate == null)
+                    return NotFound();
+
+                recentPicturePath = SaveRecentPicture(token, recentPicture);
+
+                var face1 = await UploadAndDetectFace(candidate.IdentificationCard);
+                var face2 = await UploadAndDetectFace(recentPicturePath);
+
+                var result = await _faceClient.Face.VerifyFaceToFaceAsync((Guid)face1.FaceId, (Guid)face2.FaceId);
+
+                // Check if face is identical
+                if (!result.IsIdentical) throw new Exception("Face is not identical!");
+
                 // Delete old picture if exsits
                 if (candidate.RecentPicture != null) System.IO.File.Delete(candidate.RecentPicture);
                 candidate.RecentPicture = recentPicturePath;
@@ -76,10 +81,13 @@ namespace BACS3403_Project.Controllers
                 _context.SaveChanges();
                 return Ok();
             }
-            else
+            catch (Exception e)
             {
-                System.IO.File.Delete(recentPicturePath);
-                return Unauthorized(); 
+                if (recentPicturePath != null)
+                {
+                    System.IO.File.Delete(recentPicturePath);
+                }
+                return BadRequest(e);
             }
         }
 
@@ -177,40 +185,27 @@ namespace BACS3403_Project.Controllers
         // Uploads the image file and calls DetectWithStreamAsync.
         private async Task<DetectedFace> UploadAndDetectFace(string imageFilePath)
         {
-            // Call the Face API.
-            try
-            {
-                using (Stream imageFileStream = System.IO.File.OpenRead(imageFilePath))
-                {
-                    // The second argument specifies to return the faceId, while
-                    // the third argument specifies not to return face landmarks.
-                    IList<DetectedFace> face =
-                        await _faceClient.Face.DetectWithStreamAsync(
-                            imageFileStream, true, false);
 
-                    if (face.Count == 1)
-                    {
-                        return face[0];
-                    }
-                    else
-                    {
-                        throw new Exception("Multiple face detected.");
-                    }
+            using (Stream imageFileStream = System.IO.File.OpenRead(imageFilePath))
+            {
+                // The second argument specifies to return the faceId, while
+                // the third argument specifies not to return face landmarks.
+                IList<DetectedFace> face =
+                    await _faceClient.Face.DetectWithStreamAsync(
+                        imageFileStream, true, false);
+
+                if (face.Count == 1)
+                {
+                    return face[0];
                 }
-            }
-            // Catch and display Face API errors.
-            catch (APIErrorException f)
-            {
-                throw f;
-                //MessageBox.Show(f.Message);
-                //return new List<DetectedFace>();
-            }
-            // Catch and display all other errors.
-            catch (Exception e)
-            {
-                throw e;
-                //MessageBox.Show(e.Message, "Error");
-                //return new List<DetectedFace>();
+                else if (face.Count == 0)
+                {
+                    throw new Exception("No face detected.");
+                }
+                else
+                {
+                    throw new Exception("Multiple face detected.");
+                }
             }
         }
     }
