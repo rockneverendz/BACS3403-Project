@@ -33,6 +33,15 @@
 
 }
 
+<div>
+	<a asp-controller="Recordings" 
+	   asp-action="Details" 
+	   asp-route-Id="@Context.Request.Query["recordingId"]" class="btn btn-outline-secondary">
+		Back to List
+	</a>
+</div>
+<br />
+
 <h3>Add New Question Group</h3>
 <h4>Recording Title: @recording.Title</h4>
 
@@ -99,13 +108,6 @@
 	<hr />
 </div>
 
-
-<hr />
-
-
-<div>
-	<a asp-controller="Recordings" asp-action="Details" asp-route-Id="@Context.Request.Query["recordingId"]">Back to List</a>
-</div>
 
 @section Scripts {
 
