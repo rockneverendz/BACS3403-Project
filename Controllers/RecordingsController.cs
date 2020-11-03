@@ -29,6 +29,9 @@ namespace BACS3403_Project.Controllers.Question
         // GET: Recordings/Index/1
         public async Task<IActionResult> Index(int? part)
         {
+            ViewData["StatusMessage"] = "";
+            ViewData["Status"] = "";
+
             if (part == null) part = 1;
             
             return View(await _context.Recordings
@@ -73,32 +76,18 @@ namespace BACS3403_Project.Controllers.Question
             {
 
                 string uniqueFileName = null;
-                string filePart = "";
+                string filePart;
 
                 if(model.AudioRecording != null)
 				{
-					switch (model.Part)
-					{
-                        case 1:
-                            filePart = "Storage\\AudioRecordings\\Part1\\";
-                            break;
-                        case 2:
-                            filePart = "Storage\\AudioRecordings\\Part2\\";
-                            break;
-                        case 3:
-                            filePart = "Storage\\AudioRecordings\\Part3\\";
-                            break;
-                        case 4:
-                            filePart = "Storage\\AudioRecordings\\Part4\\";
-                            break;
-                        default:
-							break;
-					}
+                    filePart = FindFilePartPath(model.Part);
 
                     uniqueFileName = Guid.NewGuid().ToString() + "_" + model.AudioRecording.FileName;
                     string path = Path.Combine(filePart, uniqueFileName);
-                    model.AudioRecording.CopyTo(new FileStream(path, FileMode.Create));
-				}
+                    System.IO.FileStream fileStream = new FileStream(path, FileMode.Create);
+                    model.AudioRecording.CopyTo(fileStream);
+                    fileStream.Close();
+                }
 
                 Recording recording = new Recording
                 {
@@ -109,10 +98,14 @@ namespace BACS3403_Project.Controllers.Question
                     ExaminerID = _userManager.GetUserId(User),
                     AudioURL = uniqueFileName
                 };
-           
+       
                 _context.Add(recording);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                TempData["StatusMessage"] = "New Recording: " + recording.Title + " has been added";
+                TempData["Status"] = "success";
+
+                return RedirectToAction("Index", new { part = recording.Part });
             }
             return View(model);
         }
@@ -130,7 +123,16 @@ namespace BACS3403_Project.Controllers.Question
             {
                 return NotFound();
             }
-            return View(recording);
+
+            RecordingEditViewModel recEditModel = new RecordingEditViewModel
+            {
+                RecordingId = recording.RecordingId,
+                Title = recording.Title,
+                Part = recording.Part,
+                AudioURL = recording.AudioURL
+            };
+
+            return View(recEditModel);
         }
 
         // POST: Recordings/Edit/5
@@ -138,9 +140,9 @@ namespace BACS3403_Project.Controllers.Question
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RecordingId,Part,AudioURL,Available,Title")] Recording recording)
+        public async Task<IActionResult> Edit(int id, RecordingEditViewModel recEditModel)
         {
-            if (id != recording.RecordingId)
+            if (id != recEditModel.RecordingId)
             {
                 return NotFound();
             }
@@ -149,12 +151,41 @@ namespace BACS3403_Project.Controllers.Question
             {
                 try
                 {
-                    _context.Update(recording);
+                    string uniqueFileName = recEditModel.AudioURL;
+                    string filePart;
+
+                    if (recEditModel.AudioRecording != null)
+                    {
+                        //Get the file path that the recording part belongs
+                        filePart = FindFilePartPath(recEditModel.Part);
+
+                        //Remove existing audio recording
+                        string existingAudioURL = Path.Combine(filePart, recEditModel.AudioURL);
+						if (System.IO.File.Exists(existingAudioURL))
+						{
+                            System.IO.File.Delete(existingAudioURL);
+                        }
+
+                        //Create new audio recording
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + recEditModel.AudioRecording.FileName;
+                        string path = Path.Combine(filePart, uniqueFileName);
+                        System.IO.FileStream fileStream = new FileStream(path, FileMode.Create);
+                        recEditModel.AudioRecording.CopyTo(fileStream);
+                        fileStream.Close();
+                    }
+
+                    //Update here db
+                    var recording = await _context.Recordings.FindAsync(id);
+
+                    recording.Title = recEditModel.Title;
+                    recording.Part = recEditModel.Part;
+                    recording.AudioURL = uniqueFileName;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RecordingExists(recording.RecordingId))
+                    if (!RecordingExists(recEditModel.RecordingId))
                     {
                         return NotFound();
                     }
@@ -163,11 +194,12 @@ namespace BACS3403_Project.Controllers.Question
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction();
             }
-            return View(recording);
+            return View(recEditModel);
         }
 
+        //NOT IN USE
         // GET: Recordings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -191,17 +223,73 @@ namespace BACS3403_Project.Controllers.Question
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //Get find recording in db
             var recording = await _context.Recordings.FindAsync(id);
-            _context.Recordings.Remove(recording);
 
+            //Get the file path that the recording part belongs
+            string filePart = FindFilePartPath(recording.Part);
+
+            //Remove existing audio recording
+            string existingAudioURL = Path.Combine(filePart, recording.AudioURL);
+            if (System.IO.File.Exists(existingAudioURL))
+            {
+                System.IO.File.Delete(existingAudioURL);
+            }
+                        
+            _context.Recordings.Remove(recording);
             await _context.SaveChangesAsync();
+
+            TempData["StatusMessage"] = "Recording: " + recording.Title + " has been deleted";
+            TempData["Status"] = "success";
+
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost, ActionName("UpdateStatus")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAvailability(int id)
+		{
+            var recording = await _context.Recordings.FindAsync(id);
+
+            if (recording.Available)
+			{
+                recording.Available = false;
+                TempData["StatusMessage"] = "Recording " + recording.RecordingId + 
+                                            ", Title: " + recording.Title + 
+                                            " has been disabled";
+                TempData["Status"] = "warning";
+            }
+			else
+			{
+                recording.Available = true;
+                TempData["StatusMessage"] = "Recording " + recording.RecordingId +
+                                            ", Title: " + recording.Title +
+                                            " has been activated";
+                TempData["Status"] = "success";
+            }
+            await _context.SaveChangesAsync();
+
+			return RedirectToAction("Index", new { part = recording.Part });
         }
 
         private bool RecordingExists(int id)
         {
             return _context.Recordings.Any(e => e.RecordingId == id);
         }
+
+        private string FindFilePartPath(int x)
+		{
+			string filePart = x switch
+			{
+				1 => "Storage\\AudioRecordings\\Part1\\",
+				2 => "Storage\\AudioRecordings\\Part2\\",
+				3 => "Storage\\AudioRecordings\\Part3\\",
+				4 => "Storage\\AudioRecordings\\Part4\\",
+				_ => "",
+			};
+			return filePart;
+        }
+
         
     }
 }
