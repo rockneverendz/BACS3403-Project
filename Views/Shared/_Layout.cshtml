@@ -27,11 +27,15 @@
 			<ul class="list-unstyled components">
 				<p>Dashboard</p>
 				<li class="active">
-					<a asp-controller="Recordings" asp-action="Index" asp-route-part=1 >Question Bank</a>
+					<a asp-controller="Recordings" asp-action="Index" asp-route-part=1>
+						<i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i> Question Bank
+					</a>
 				</li>
 				<li>
 					<a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false"
-					   class="dropdown-toggle show">Test Administration</a>
+					   class="show">
+						<i class="fa fa-users fa-fw" aria-hidden="true" ></i> Test Administration
+					</a>
 					<ul class="collapse list-unstyled" id="adminSubmenu">
 						<li>
 							<a href="#">Generate Seat Number</a>
@@ -39,14 +43,13 @@
 						<li>
 							<a href="#">View Attandance</a>
 						</li>
-						<li>
-							<a href="#">Seat Overview</a>
-						</li>
 					</ul>
 				</li>
 				<li>
 					<a href="#gradeSubmenu" data-toggle="collapse" aria-expanded="false"
-					   class="dropdown-toggle show">Grades </a>
+					   class="show">
+						<i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i> Grades 
+					</a>
 					<ul class="collapse list-unstyled" id="gradeSubmenu">
 						<li>
 							<a href="#">Review Test Answers</a>
@@ -55,6 +58,12 @@
 							<a href="#">Generate Grade Report</a>
 						</li>
 					</ul>
+				</li>
+				<hr />
+				<li class="active">
+					<a href="#">
+						<i class="fa fa-power-off fa-fw" aria-hidden="true" ></i> Logout
+					</a>
 				</li>
 
 			</ul>
@@ -65,23 +74,23 @@
 
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<div class="container-fluid">
-
 					<button type="button" id="sidebarCollapse" class="btn btn-light">
 						<i class="fas fa-bars"></i>
 					</button>
-					<a class="h4 ml-0 mb-0 " href="#">Examiner Portal</a>
+					<a class="h4 ml-0 mb-0 ">Examiner Portal</a>
 					<span class="navbar-text mb-0">
 						<i class="fas fa-user-circle h4"></i>
 						Username
 					</span>
-
 					<partial name="_LoginPartial" />
-
 				</div>
 			</nav>
 
 			<div class="mainContent">
 				@RenderBody()
+				<a id="back-to-top" href="#" class="btn btn-outline-secondary btn-lg back-to-top" role="button">
+					<i class="fas fa-chevron-up"></i>
+				</a>
 			</div>
 
 		</div>
@@ -91,6 +100,8 @@
 			</div>
 		</footer>
 	</div>
+
+
 
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -110,8 +121,24 @@
 				$('.collapse.in').toggleClass('in');
 				$('a[aria-expanded=true]').attr('aria-expanded', 'false');
 			});
+
+			$(window).scroll(function () {
+				if ($(this).scrollTop() > 50) {
+					$('#back-to-top').fadeIn();
+				} else {
+					$('#back-to-top').fadeOut();
+				}
+			});
+			// scroll body to 0px on click
+			$('#back-to-top').click(function () {
+				$('body,html').animate({
+					scrollTop: 0
+				}, 400);
+				return false;
+			});
+
 		});
-		
+
 	</script>
 
 	@RenderSection("Scripts", required: false)
