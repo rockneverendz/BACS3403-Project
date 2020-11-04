@@ -39,189 +39,255 @@
 	}
 }
 
+<div>
+	<a asp-action="Index" asp-route-part="@Model.Part" class="btn btn-outline-secondary">
+	<i class="fa fa-chevron-left" aria-hidden="true"></i>
+	Back to List
+	</a>
+</div>
+<br />
+<div class="container">
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active font-weight-bold px-5" id="tabHeader">
+				Recording Part @Model.Part -
+				ID: @Model.RecordingId
+			</a>
+		</li>
+	</ul>
+	<br />
 	<div class="container">
-		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link active font-weight-bold px-5" id="tabHeader">
-					Recording Part @Model.Part -
-					ID: @Model.RecordingId
-				</a>
-			</li>
-		</ul>
-		<br />
-		<form asp-action="">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<div class="form-row mb-3">
-				<div class="col-4">
-					<label asp-for="Title" class="control-label"></label>
-					<input asp-for="Title" class="form-control" value="@Model.Title" disabled />
-					<span asp-validation-for="Title" class="text-danger"></span>
-				</div>
-				<div class="pl-5 col-4">
-					<label asp-for="AudioURL" class="control-label"></label>
-					<audio controls>
-						<source src="@("/Storage/AudioRecordings/Part" + Model.Part + "/" + Model.AudioURL)" type="audio/mpeg">
-						Your browser does not support the audio element.
-					</audio>
-				</div>
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-row mb-3">
+			<div class="col-4">
+				<label asp-for="Title" class="control-label"></label>
+				<input asp-for="Title" class="form-control" value="@Model.Title" disabled />
+				<span asp-validation-for="Title" class="text-danger"></span>
 			</div>
-			<div class="form-row mb-3 col-4">
-				<div class="custom-control custom-checkbox">
-					<input asp-for="Available" type="checkbox" class="custom-control-input" id="customCheck1" disabled>
-					<label asp-for="Available" class="custom-control-label" for="customCheck1">
-						@(Model.Available == true ? "Enabled" : "Disabled")
-					</label>
-				</div>
-				<span asp-validation-for="Available" class="text-danger"></span>
-				@*<div class="form-group ml-5 pl-5" >
-					<input type="submit" value="Edit" class="btn btn-primary" />
-				</div>*@
+			<div class="pl-5 col-4">
+				<label asp-for="AudioURL" class="control-label"></label>
+				<audio controls>
+					<source src="@("/Storage/AudioRecordings/Part" + Model.Part + "/" + Model.AudioURL)" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
 			</div>
-		</form>
-
-		@*
-		IF (Recording.QuestionGrp != NULL) THEN
-
-		   >> DISPLAY THE QUESTIONS GRP IN THE DB
-
-		   IF (QUESTIONS GRP LastNo != Last No) THEN
-
-			   >> DISPLAY THE CREATE NEW QUESTGRP BUTTON
-		*@
-
-		@{
-			var QuestionModel = Model.QuestionGroups;
-
-			if (QuestionModel != null)
-			{
-				foreach (var item in QuestionModel.ToList())
-				{
-					<div class="card justify-content-center">
-						<div class="card-body">
-							<form action="" method="post">
-								<div class="form-inline">
-									<div class="form-group col-4">
-										<label for="selectQuestNo" class="col-form-label  mx-3">Questions:</label>
-										<select class="custom-select" id="selectQuestNo" disabled>
-											@for (int i = questNoStart; i <= questNoEnd; i++)
-											{
-												@if (item.QuestionNoStart == i)
-												{
-													<option value="@i" selected>@i</option>
-												}
-												else
-												{
-													<option value="@i">@i</option>
-												}
-											}
-										</select>
-
-										<label for="selectQuestNo2" class="col-form-label mx-3">To</label>
-										<select class="custom-select" id="selectQuestNo2" disabled>
-											@for (int i = questNoStart; i <= questNoEnd; i++)
-											{
-												@if (item.QuestionNoEnd == i)
-												{
-													<option value="@i" selected>@i</option>
-													flagLastQuestNo = item.QuestionNoEnd;
-												}
-												else
-												{
-													<option value="@i">@i</option>
-												}
-
-											}
-										</select>
-									</div>
-
-									<div class="form-group col-8">
-										<label for="selectQuestNo" class="col-form-label  mx-3">Question Type</label>
-										<select class="custom-select col-8" id="selectQuestType" disabled>
-
-											@*Create string array to store diplay option *@
-
-											@for (int i = 0; i < 6; i++)
-											{
-												@if (item.TaskType == (i + 1))
-												{
-													<option value="@(i + 1)" selected>@optionArr[i]</option>
-												}
-												else
-												{
-													<option value="@(i + 1)">@optionArr[i]</option>
-												}
-											}
-
-										</select>
-									</div>
-								</div>
-
-								<div class="form-group mx-5 my-3 col-10">
-									<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
-									@{ 
-										string content;
-
-										try
-										{
-											content = System.IO.File.ReadAllText(item.QuestionGroupURL);
-										}
-										catch (Exception e)
-										{
-											content = "";
-											Console.WriteLine(e);
-										}
-									}
-									<textarea name="content" class="editor">@content</textarea>
-								</div>
-
-								<div class="mx-5 my-3 col-10">
-									<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
-
-									@foreach (var mkItem in item.MarkSchemes.ToList())
-											{
-										<div class="form-group row">
-											<label class="col-form-label col-1 text-right">@mkItem.Index.</label>
-											<div class="col-6">
-												<input class="form-control " value="@mkItem.Answer" disabled />
-											</div>
-										</div>
-									}
-								</div>
-							</form>
-						</div>
-						<div class="card-footer text-muted text-right">
-							@* To-do Post to QustionGroup Edit and Delete Controller*@
-							<a href="#" class="btn btn-primary">Edit</a>
-							<a href="#" class="btn btn-danger">Remove</a>
-						</div>
+		</div>
+		<div class="form-row mb-3">
+			<div class="pl-3 col-4">
+				<div class="row">
+					<label>Availability: &nbsp;</label>
+					<div class="custom-control custom-checkbox">
+						<input asp-for="Available" type="checkbox" class="custom-control-input" id="customCheck1" disabled>
+						<label asp-for="Available" class="custom-control-label" for="customCheck1">
+							@(Model.Available == true ? "Enabled" : "Disabled")
+						</label>
 					</div>
-				}
-			}
-		}
-
-		<hr />
-
-		@if (flagLastQuestNo != questNoEnd)
-		{
-			<div class="nav justify-content-center">
-				<a asp-controller="QuestionGroups"
-				   asp-action="Create"
-				   asp-route-recordingId="@Model.RecordingId"
-				   asp-route-recordingPart="@Model.Part"
-				   asp-route-lastQuestNo="@flagLastQuestNo" class="btn btn-lg btn-secondary">
-					<i class="fa fa-plus-circle" aria-hidden="true"></i> &nbsp; New Question Group
-				</a>
+				</div>
 			</div>
-		}
-
-
+			<div class="col-8">
+				<div class="form-group">
+					<a asp-action="Edit" asp-route-id="@Model.RecordingId" class="btn btn-outline-info float-right">
+						Edit Recording
+					</a>
+				</div>
+			</div>
+		</div>
 	</div>
 
-<hr />
+	<hr />
+	@*
+	IF (Recording.QuestionGrp != NULL) THEN
+		>> DISPLAY THE QUESTIONS GRP IN THE DB
 
-<div>
-	<a asp-action="Index" asp-route-part="@Model.Part" class="btn btn-outline-primary">Back to List</a>
+		IF (QUESTIONS GRP LastNo != Last No) THEN
+			>> DISPLAY THE CREATE NEW QUESTGRP BUTTON
+		IF ()
+	*@
+
+	@{
+		var lastQuestionGroup = Model.QuestionGroups.LastOrDefault();
+		var QuestionModel = Model.QuestionGroups;
+		var counterForModal = 1;
+
+		if (QuestionModel != null)
+		{
+			foreach (var item in QuestionModel.ToList())
+			{
+				<div class="card justify-content-center">
+					<div class="card-body">
+						<form action="" method="post">
+							<div class="form-inline">
+								<div class="form-group col-4">
+									<label for="selectQuestNo" class="col-form-label  mx-3">Questions:</label>
+									<select class="custom-select" id="selectQuestNo" disabled>
+										@for (int i = questNoStart; i <= questNoEnd; i++)
+										{
+											@if (item.QuestionNoStart == i)
+											{
+												<option value="@i" selected>@i</option>
+											}
+											else
+											{
+												<option value="@i">@i</option>
+											}
+										}
+									</select>
+
+									<label for="selectQuestNo2" class="col-form-label mx-3">To</label>
+									<select class="custom-select" id="selectQuestNo2" disabled>
+										@for (int i = questNoStart; i <= questNoEnd; i++)
+										{
+											@if (item.QuestionNoEnd == i)
+											{
+												<option value="@i" selected>@i</option>
+												flagLastQuestNo = item.QuestionNoEnd + 1;
+											}
+											else
+											{
+												<option value="@i">@i</option>
+											}
+
+										}
+									</select>
+								</div>
+
+								<div class="form-group col-8">
+									<label for="selectQuestNo" class="col-form-label  mx-3">Question Type</label>
+									<select class="custom-select col-8" id="selectQuestType" disabled>
+
+										@*Create string array to store diplay option *@
+
+										@for (int i = 0; i < 6; i++)
+										{
+											@if (item.TaskType == (i + 1))
+											{
+												<option value="@(i + 1)" selected>@optionArr[i]</option>
+											}
+											else
+											{
+												<option value="@(i + 1)">@optionArr[i]</option>
+											}
+										}
+
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group mx-5 my-3 col-10">
+								<label for="questTextArea" class="col-form-label-lg"><b>Question:</b></label>
+								@{ 
+									string content;
+
+									try
+									{
+										content = System.IO.File.ReadAllText(item.QuestionGroupURL);
+									}
+									catch (Exception e)
+									{
+										content = "";
+										Console.WriteLine(e);
+									}
+								}
+								<textarea name="content" class="editor">@content</textarea>
+							</div>
+
+							<div class="mx-5 my-3 col-10">
+								<label for="questTextArea" class="col-form-label-lg"><b>Answers:</b></label>
+
+								@foreach (var mkItem in item.MarkSchemes.ToList())
+										{
+									<div class="form-group row">
+										<label class="col-form-label col-1 text-right">@mkItem.Index.</label>
+										<div class="col-6">
+											<input class="form-control " value="@mkItem.Answer" disabled />
+										</div>
+									</div>
+								}
+							</div>
+						</form>
+					</div>
+					<div class="card-footer text-muted text-right">
+						@* To-do Post to QustionGroup Edit and Delete Controller*@
+						<a asp-controller="QuestionGroups" asp-action="Edit" asp-route-id="@item.QuestionGroupId"
+						   class="btn btn-primary">
+							Edit &nbsp; <i class="fa fa-pencil" aria-hidden="true"></i>
+						</a>
+
+						@if (lastQuestionGroup.QuestionGroupId == item.QuestionGroupId)
+						{
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal@(counterForModal)">
+								Delete &nbsp; <i class="fa fa-trash" aria-hidden="true"></i>
+							</button>
+
+							<!-- Modal -->
+							<div class="modal fade" id="deleteModal@(counterForModal)" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="deleteModalLabel">Confirm to delete questions</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="row">
+												<div class="col-3">
+													<i class="fa fa-exclamation-triangle fa-3x text-warning" aria-hidden="true"></i>
+												</div>
+												<p class="col-9 text-justify">
+													Are you sure you want to delete these questions
+													<b>Question @item.QuestionNoStart to @item.QuestionNoEnd</b> ?
+												</p>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+											@*To-do make a form here to directly post to delete action*@
+											<form asp-controller="QuestionGroups" asp-action="Delete" method="post">
+												<input type="hidden" name="QuestionGroupId" value="@(item.QuestionGroupId)" />
+												<button asp-controller="QuestionGroups"
+														asp-action="Delete"
+														asp-route-id="@item.QuestionGroupId"
+														type="submit"
+														class="btn btn-danger">
+													Delete
+												</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						}
+
+
+					</div>
+				</div>
+				<br />
+				counterForModal++;
+			}
+		}
+	}
+
+
+	<hr />
+
+	@if ((flagLastQuestNo-1) != questNoEnd)
+	{
+		<div class="nav justify-content-center">
+			<a asp-controller="QuestionGroups"
+			   asp-action="Create"
+			   asp-route-recordingId="@Model.RecordingId"
+			   asp-route-recordingPart="@Model.Part"
+			   asp-route-lastQuestNo="@flagLastQuestNo" class="btn btn-lg btn-secondary">
+				<i class="fa fa-plus-circle" aria-hidden="true"></i> &nbsp; New Question Group
+			</a>
+		</div>
+	}
 </div>
+
+
+
 
 
 @section Scripts {

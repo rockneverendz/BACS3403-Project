@@ -1,49 +1,82 @@
-﻿@model BACS3403_Project.Models.Recording
+﻿@model BACS3403_Project.ViewModels.RecordingEditViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Recording</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="RecordingId" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Part" class="control-label"></label>
-                <input asp-for="Part" class="form-control" />
-                <span asp-validation-for="Part" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AudioURL" class="control-label"></label>
-                <input asp-for="AudioURL" class="form-control" />
-                <span asp-validation-for="AudioURL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Available" class="control-label"></label>
-                <input asp-for="Available" class="form-control" />
-                <span asp-validation-for="Available" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
 <div>
-    <a asp-action="Index" asp-route-part="@Model.Part">Back to List</a>
+	<a asp-action="Index" asp-route-part="@Model.Part" class="btn btn-outline-secondary">Back to List</a>
 </div>
+
+<br />
+<div class="h4">Edit Recording - Recording ID: @Model.RecordingId</div>
+
+<hr />
+<div class="container">
+	<form enctype="multipart/form-data" asp-action="Edit">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<input type="hidden" asp-for="RecordingId" />
+
+		<div class="form-row mb-3">
+			<div class="col-5">
+				<label asp-for="Title" class="control-label"></label>
+				<input asp-for="Title" class="form-control" />
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+			<div class="col-5">
+				<label asp-for="Part" class="control-label"></label>
+				<input asp-for="Part" class="form-control" readonly />
+				<span asp-validation-for="Part" class="text-danger"></span>
+			</div>
+		</div>
+
+		<div class="form-row mb-3">
+			<div class="col-3 mr-5">
+				<label asp-for="AudioURL" class="control-label">Current Audio Recording</label>
+				<input asp-for="AudioURL" type="hidden" value="@Model.AudioURL" />
+				<br />
+				<audio controls>
+					<source src="@("/Storage/AudioRecordings/Part" + Model.Part + "/" + Model.AudioURL)" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
+			</div>
+			<div class="col-5 mt-5">
+				<input class="form-control" value="@(Model.AudioURL.Substring(Model.AudioURL.IndexOf("_")+1))" readonly />
+			</div>
+		</div>
+
+		<div class="form-row mb-3">
+			<div class="col-5">
+				<label asp-for="AudioRecording" class="control-label">Upload New Recording</label>
+				<div class="custom-file">
+					<input asp-for="AudioRecording" class="custom-file-input" id="validatedCustomFile" accept="audio/*">
+					<label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+					<span asp-validation-for="AudioRecording" class="text-danger"></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="col-10">
+				<input type="submit" value="Save Changes" class="btn btn-primary float-right" />
+			</div>
+		</div>
+		<hr />
+	</form>
+</div>
+
+
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	<script>
+		$(document).ready(function () {
+			$('.custom-file-input').on("change", function () {
+				var filename = $(this).val().split("\\").pop();
+				$(this).next('.custom-file-label').html(filename);
+			});
+
+		});
+
+	</script>
 }

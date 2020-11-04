@@ -269,4 +269,10 @@ ul li a:active {
     background-color: #fafafa !important;
 }
 
-
+.back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: none;
+    border-radius: 10px;
+}

@@ -4,7 +4,10 @@
 @{
 	ViewData["Title"] = "Question Bank";
 	Layout = "~/Views/Shared/_Layout.cshtml";
+	string tempData = TempData["Status"] as string;
 
+	var counterForModal = 1;
+	int counter = 0;
 	string TitleHeader;
 	string Desc;
 
@@ -32,6 +35,17 @@
 			break;
 	}
 }
+
+@if (tempData != null)
+{
+	<div class="alert @(tempData.Equals("warning") ? "alert-warning" : "alert-info") mt-0" role="alert" id="successalert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		@TempData["StatusMessage"]
+	</div>
+}
+
 
 <div class="tab card">
 	<a asp-action="Index" asp-route-part=1 id="defaultOpen" class="tablinks @(Context.Request.Query["part"] == "1" ? "active":"")">
@@ -66,15 +80,22 @@
 		<div class="card mb-2">
 			<div class="card-body recording">
 				<div class="recText">
-					<a href="#">
-						@* If Availability is True == Success(Green) Else == Grey(Secondary)  *@
-						<i class="fa fa-check-circle @(item.Available == true ? "text-success":"text-secondary")" aria-hidden="true"></i>
-					</a>
-					<a asp-action="Details" asp-route-id="@item.RecordingId">
-						@* Recording Title *@
-						&nbsp;&nbsp; @Html.DisplayFor(modelItem => item.Title)
-					</a>
-
+					<div class="row">
+						<div class="col-1">
+							<form id="recForm@(counter)" asp-action="UpdateStatus" asp-route-id="@item.RecordingId" method="post">
+								<a onclick="document.getElementById('recForm@(counter)').submit()">
+									@* If Availability is True == Success(Green) Else == Grey(Secondary)  *@
+									<i class="fa fa-check-circle fa-lg @(item.Available == true ? "text-success":"text-secondary")" aria-hidden="true"></i>
+								</a>
+							</form>
+						</div>
+						<div class="col-auto">
+							<a asp-action="Details" asp-route-id="@item.RecordingId">
+								@* Recording Title *@
+								&nbsp;&nbsp; @Html.DisplayFor(modelItem => item.Title)
+							</a>
+						</div>
+					</div>
 				</div>
 				<div class="dropdown">
 					<button class="btn btn-light dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -84,14 +105,63 @@
 						<a asp-action="Edit" asp-route-id="@item.RecordingId" class="btn dropdown-item">
 							Edit <i class="fa fa-pencil text-primary float-right mt-1" aria-hidden="true"></i>
 						</a>
-						<a asp-action="Delete" asp-route-id="@item.RecordingId" class="btn dropdown-item">
-							Delete<i class="fa fa-trash text-danger float-right mt-1" aria-hidden="true"></i>
+
+						@*<a asp-action="Delete" asp-route-id="@item.RecordingId" class="btn dropdown-item">
+								Delete<i class="fa fa-trash text-danger float-right mt-1" aria-hidden="true"></i>
+							</a>*@
+
+						<!-- Button trigger modal -->
+						<a type="button" class="btn dropdown-item" data-toggle="modal" data-target="#deleteModal@(counterForModal)">
+							Delete &nbsp; <i class="fa fa-trash text-danger float-right mt-1" aria-hidden="true"></i>
 						</a>
 					</div>
 				</div>
 			</div>
 		</div>
 
+		<!-- Modal -->
+		<div class="modal fade" id="deleteModal@(counterForModal)" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deleteModalLabel">Confirm to delete recording</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-3 text-right mt-2">
+								<i class="fa fa-exclamation-triangle fa-3x text-warning" aria-hidden="true"></i>
+							</div>
+							<p class="col-8 text-justify">
+								Are you sure you want to delete this recording? <br />
+								Recording ID: @item.RecordingId <br />
+								Title: @item.Title 
+							</p>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						@*To-do make a form here to directly post to delete action*@
+						<form asp-action="Delete" method="post">
+							<input type="hidden" name="RecordingId" value="@(item.RecordingId)" />
+							<button asp-controller="Recordings"
+									asp-action="Delete"
+									asp-route-id="@item.RecordingId"
+									type="submit"
+									class="btn btn-danger">
+								Delete
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		counter++;
+		counterForModal++;
 	}
 </div>
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BACS3403_Project.Data;
 using BACS3403_Project.Models;
 using Microsoft.AspNetCore.Identity;
+using BACS3403_Project.ViewModels;
 
 namespace BACS3403_Project.Controllers
 {
@@ -45,7 +46,11 @@ namespace BACS3403_Project.Controllers
         
         public IActionResult Create(int? recordingId)
         {
-            ViewData["RecordingID"] = recordingId;
+            var recording = _context.Recordings
+                            .FirstOrDefault(r => r.RecordingId == recordingId);
+
+            ViewData["RecordingModel"] = recording;
+
             return View();
         }
 
@@ -59,7 +64,7 @@ namespace BACS3403_Project.Controllers
             if (ModelState.IsValid)
             {
                 // Check if user is authorized to create recording
-                if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();
+                /*if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();*/
 
 
                 /* Find the Recording on based on QuestionGroup -> Recording ID*/
@@ -67,6 +72,7 @@ namespace BACS3403_Project.Controllers
                                 .FirstOrDefaultAsync(m => m.RecordingId == questionGroup.RecordingID);
 
                 string filePath = "not found";
+                /*string filePathPdf = "not found";*/
                 string fileName = "";
 
                 /* Save the textarea content b4 update the filePath */
@@ -96,14 +102,17 @@ namespace BACS3403_Project.Controllers
                                 recording.RecordingId + "_" +
                                 recording.Part + "_" +
                                 questionGroup.QuestionNoStart + "_To_" +
-                                questionGroup.QuestionNoEnd + 
-                                ".txt";
+                                questionGroup.QuestionNoEnd;
 
                 /* Combine File Path and File Name */
-                filePath += fileName;
+                filePath += fileName + ".html";
+                /* filePathPdf += fileName + ".pdf";*/
 
                 /* Write content to file */
                 System.IO.File.WriteAllText(filePath, content);
+
+                /*Create and save to pdf*/
+                /*convertToPdf(filePath, content);*/
 
                 /* Update Question Group URL */
                 questionGroup.QuestionGroupURL = filePath;
@@ -125,25 +134,57 @@ namespace BACS3403_Project.Controllers
         }
 
         // GET: QuestionGroups/Edit/5
-        public async Task<IActionResult> Edit(int? recordingId, int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var questionGroup = await _context.Questions.FindAsync(id);
+            var questionGroup = await _context.Questions
+                .Include(q => q.MarkSchemes)
+                .FirstOrDefaultAsync(m => m.QuestionGroupId == id);
+
             if (questionGroup == null)
             {
                 return NotFound();
             }
 
             // Check if user is authorized to edit recording
-            if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();
+            /*if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();*/
 
-            ViewData["RecordingID"] = questionGroup.RecordingID;
+            var recording = _context.Recordings
+                .FirstOrDefault(r => r.RecordingId == questionGroup.RecordingID);
 
-            return View(questionGroup);
+            ViewData["RecordingModel"] = recording;
+
+            // Relocate data to get markscheme in List not collection ...
+
+            var questionGrpWifListMarkScheme = new EditQuestionGroupViewModel();
+            var markSchemeList = new List<EditMarkSchemeViewModel>();
+
+            questionGrpWifListMarkScheme.QuestionGroupId = questionGroup.QuestionGroupId;
+            questionGrpWifListMarkScheme.QuestionNoStart = questionGroup.QuestionNoStart;
+            questionGrpWifListMarkScheme.QuestionNoEnd = questionGroup.QuestionNoEnd;
+            questionGrpWifListMarkScheme.TaskType = questionGroup.TaskType;
+            questionGrpWifListMarkScheme.QuestionGroupURL = questionGroup.QuestionGroupURL;
+            questionGrpWifListMarkScheme.RecordingID = questionGroup.RecordingID;
+
+			foreach (var x in questionGroup.MarkSchemes)
+			{
+				var ms = new EditMarkSchemeViewModel
+				{
+					MarkSchemeID = x.MarkSchemeID,
+					Index = x.Index,
+					Answer = x.Answer,
+					QuestionGroupID = x.QuestionGroupID
+				};
+				markSchemeList.Add(ms);
+
+            }
+            questionGrpWifListMarkScheme.MarkSchemes = markSchemeList;
+
+            return View(questionGrpWifListMarkScheme);
         }
 
         // POST: QuestionGroups/Edit/5
@@ -151,9 +192,9 @@ namespace BACS3403_Project.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("QuestionGroupId,TaskType,QuestionGroupURL,RecordingID")] QuestionGroup questionGroup)
+        public async Task<IActionResult> Edit(int id, EditQuestionGroupViewModel questionGroupViewModel)
         {
-            if (id != questionGroup.QuestionGroupId)
+            if (id != questionGroupViewModel.QuestionGroupId)
             {
                 return NotFound();
             }
@@ -161,16 +202,45 @@ namespace BACS3403_Project.Controllers
             if (ModelState.IsValid)
             {
                 // Check if user is authorized to edit recording
-                if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();
-
+                /*if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();*/
                 try
                 {
-                    _context.Update(questionGroup);
+                    //get the old questionGrp question html content...
+                    var currQG = _context.Questions
+                                      .FirstOrDefault(q => q.QuestionGroupId == questionGroupViewModel.QuestionGroupId);
+                    var existingURLPath = currQG.QuestionGroupURL;
+
+                    //Replace the old content with the new content
+                    var newContent = questionGroupViewModel.QuestionGroupURL; //<-- the URL stores the content in the view
+
+                    /* Write content to file */
+                    System.IO.File.WriteAllText(existingURLPath, newContent);
+
+                    //Relocate QuestionGrp Data
+                    currQG.TaskType = questionGroupViewModel.TaskType;
+                    
+                    // Save QuestionGrp
                     await _context.SaveChangesAsync();
+
+                    //Relocate MarkScheme Data
+                    if (questionGroupViewModel.MarkSchemes != null)
+                    {
+                        foreach (var item in questionGroupViewModel.MarkSchemes)
+                        {
+                            var record = _context.MarkSchemes.Find(item.MarkSchemeID);
+                            if (record != null)
+                            {
+                                record.Answer = item.Answer;
+                            }
+                        }
+                        //Save all
+                        await _context.SaveChangesAsync();
+                    }
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!QuestionGroupExists(questionGroup.QuestionGroupId))
+                    if (!QuestionGroupExists(questionGroupViewModel.QuestionGroupId))
                     {
                         return NotFound();
                     }
@@ -179,10 +249,10 @@ namespace BACS3403_Project.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Recordings", new { id = questionGroupViewModel.RecordingID });
+                
             }
-            ViewData["RecordingID"] = questionGroup.RecordingID;
-            return View(questionGroup);
+            return View(questionGroupViewModel);
         }
 
         // GET: QuestionGroups/Delete/5
@@ -212,10 +282,18 @@ namespace BACS3403_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var questionGroup = await _context.Questions.FindAsync(id);
+            var questionGroup = _context.Questions.Find(id);
+            var rec = _context.Recordings.Find(questionGroup.RecordingID);
+
+            //Remove existing question group recording
+            if (System.IO.File.Exists(questionGroup.QuestionGroupURL))
+            {
+                System.IO.File.Delete(questionGroup.QuestionGroupURL);
+            }
+
             _context.Questions.Remove(questionGroup);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Recordings", new { id = rec.RecordingId });
         }
 
         private bool QuestionGroupExists(int id)
@@ -230,7 +308,6 @@ namespace BACS3403_Project.Controllers
         }
 
         // GET: QuestionGroups/CreateMarkScheme
-
         public async Task<IActionResult> CreateMarkScheme(int? id)
         {
             /* Find Question Group and Set to ViewData*/          
@@ -273,7 +350,6 @@ namespace BACS3403_Project.Controllers
 
 
         // POST: QuestionGroups/CreateMarkScheme
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateMarkScheme(List<MarkScheme> markScheme)
@@ -295,7 +371,6 @@ namespace BACS3403_Project.Controllers
 				}
             }
 
-
             /*Reverse serach back question group to return the view*/
             var addedMarkScheme = await _context.MarkSchemes
                 .OrderByDescending(x => x.MarkSchemeID)
@@ -308,10 +383,32 @@ namespace BACS3403_Project.Controllers
             /*return View(markScheme);*/
         }
 
+        /*  Testing DinkToPdf*/
+        /*public void convertToPdf(string path, string content)
+		{
+            var converter = new SynchronizedConverter(new PdfTools());
 
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("QuestionGroupId,TaskType,QuestionGroupURL,RecordingID,QuestionNoEnd,QuestionNoStart")] QuestionGroup questionGroup)*/
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = {
+                    ColorMode = ColorMode.Color,
+                    Orientation = Orientation.Landscape,
+                    PaperSize = PaperKind.A4Plus,
+                    Out = path,
+                },
+                Objects = {
+                    new ObjectSettings() {
+                        PagesCount = true,
+                        HtmlContent = content,
+                        WebSettings = { DefaultEncoding = "utf-8" },
+                        HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 }
+                    }
+                }
+            };
+
+            converter.Convert(doc);
+
+        }*/
 
 
     }
