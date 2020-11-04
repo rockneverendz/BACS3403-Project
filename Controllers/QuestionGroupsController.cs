@@ -64,7 +64,7 @@ namespace BACS3403_Project.Controllers
             if (ModelState.IsValid)
             {
                 // Check if user is authorized to create recording
-                if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();
+                /*if (!IsOwner(questionGroup.RecordingID)) return Unauthorized();*/
 
 
                 /* Find the Recording on based on QuestionGroup -> Recording ID*/
@@ -283,11 +283,17 @@ namespace BACS3403_Project.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var questionGroup = _context.Questions.Find(id);
-            var recID = questionGroup.RecordingID;
+            var rec = _context.Recordings.Find(questionGroup.RecordingID);
+
+            //Remove existing question group recording
+            if (System.IO.File.Exists(questionGroup.QuestionGroupURL))
+            {
+                System.IO.File.Delete(questionGroup.QuestionGroupURL);
+            }
 
             _context.Questions.Remove(questionGroup);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Recordings", new { id = recID });
+            return RedirectToAction("Details", "Recordings", new { id = rec.RecordingId });
         }
 
         private bool QuestionGroupExists(int id)
@@ -376,7 +382,6 @@ namespace BACS3403_Project.Controllers
             return RedirectToAction("Details", "Recordings", new { id = reverseFindQuestionGrp.RecordingID });
             /*return View(markScheme);*/
         }
-
 
         /*  Testing DinkToPdf*/
         /*public void convertToPdf(string path, string content)
