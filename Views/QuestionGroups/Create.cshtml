@@ -54,11 +54,11 @@
 				<div class="form-group col-4">
 
 					<label for="selectQuestNo" class="col-form-label  mx-3">Questions:</label>
-					<input type="hidden" asp-for="QuestionNoStart" value="@(lastQuestGrpNo == 1 ? lastQuestGrpNo:  lastQuestGrpNo + 1)" />
+					<input type="hidden" asp-for="QuestionNoStart" value="@(lastQuestGrpNo)" />
 					<select  class="custom-select" id="selectQuestNo">
-						@for (int i = (lastQuestGrpNo == 1 ? lastQuestGrpNo : lastQuestGrpNo + 1) ; i <= questNoEnd; i++)
+						@for (int i = lastQuestGrpNo ; i <= questNoEnd; i++)
 						{
-							@if ( i == (lastQuestGrpNo == 1 ? lastQuestGrpNo : lastQuestGrpNo + 1))
+							@if ( i == lastQuestGrpNo)
 							{
 								<option value="@i" selected>@i</option>
 							}
@@ -67,7 +67,7 @@
 
 					<label for="selectQuestNo2" class="col-form-label mx-3">To</label>
 					<select asp-for="QuestionNoEnd" class="custom-select" id="selectQuestNo2" required>
-						@for (int i = (lastQuestGrpNo == 1 ? lastQuestGrpNo + 1 : lastQuestGrpNo + 2); i <= questNoEnd; i++)
+						@for (int i = lastQuestGrpNo + 1 ; i <= questNoEnd; i++)
 						{
 							<option value="@i">@i</option>
 						}

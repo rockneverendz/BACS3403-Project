@@ -140,7 +140,7 @@
 											@if (item.QuestionNoEnd == i)
 											{
 												<option value="@i" selected>@i</option>
-												flagLastQuestNo = item.QuestionNoEnd;
+												flagLastQuestNo = item.QuestionNoEnd + 1;
 											}
 											else
 											{
@@ -272,7 +272,7 @@
 
 	<hr />
 
-	@if (flagLastQuestNo != questNoEnd)
+	@if ((flagLastQuestNo-1) != questNoEnd)
 	{
 		<div class="nav justify-content-center">
 			<a asp-controller="QuestionGroups"
