@@ -11,6 +11,7 @@ using Microsoft.Azure.CognitiveServices.Vision.Face;
 using BACS3403_Project.Data;
 using BACS3403_Project.Models;
 using Microsoft.Extensions.Configuration;
+using System.ComponentModel.DataAnnotations;
 
 namespace BACS3403_Project.Controllers
 {
@@ -52,6 +53,8 @@ namespace BACS3403_Project.Controllers
         [HttpPost("VerifyCandidate")]
         public async Task<ActionResult<Candidate>> VerifyCandidate([FromForm] CandidateFaceModel candidateFaceModel)
         {
+            if (!ModelState.IsValid) return BadRequest();
+
             string recentPicturePath = null;
 
             try
@@ -91,11 +94,11 @@ namespace BACS3403_Project.Controllers
             }
         }
 
-        private async Task<Candidate> GetCandidateByToken(string Token)
+        public async Task<Candidate> GetCandidateByToken(string token)
         {
             return await _context.Candidates
                             .Include(candidate => candidate.Test)
-                            .FirstOrDefaultAsync(candidate => candidate.Token == Token);
+                            .FirstOrDefaultAsync(candidate => candidate.Token == token);
         }
 
         private static string SaveRecentPicture(string Token, IFormFile recentPicture)
@@ -115,66 +118,6 @@ namespace BACS3403_Project.Controllers
             }
 
             return path;
-        }
-
-        // PUT: api/Candidates/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCandidate(int id, Candidate candidate)
-        {
-            if (id != candidate.CandidateID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(candidate).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CandidateExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Candidates
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Candidate>> PostCandidate(Candidate candidate)
-        {
-            _context.Candidates.Add(candidate);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCandidate", new { id = candidate.CandidateID }, candidate);
-        }
-
-        // DELETE: api/Candidates/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Candidate>> DeleteCandidate(int id)
-        {
-            var candidate = await _context.Candidates.FindAsync(id);
-            if (candidate == null)
-            {
-                return NotFound();
-            }
-
-            _context.Candidates.Remove(candidate);
-            await _context.SaveChangesAsync();
-
-            return candidate;
         }
 
         private bool CandidateExists(int id)
@@ -225,7 +168,9 @@ namespace BACS3403_Project.Controllers
 
     public class CandidateFaceModel
     {
+        [Required]
         public string Token { get; set; }
+        [Required]
         public IFormFile Face { get; set; }
     }
 }
