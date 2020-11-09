@@ -24,7 +24,7 @@ namespace BACS3403_Project.Controllers
 
         // POST: api/RecordingLists/CreateRecordingList
         [HttpPost("CreateRecordingList")]
-        public async Task<ActionResult<RecordingDTO[]>> CreateRecordingList([FromForm] string token)
+        public async Task<ActionResult<RecordingDTO[]>> CreateRecordingList(string token)
         {
             if (token == null) return BadRequest();
 
@@ -34,14 +34,14 @@ namespace BACS3403_Project.Controllers
                                         .FirstOrDefaultAsync(candidate => candidate.Token == token);
 
             // Generate list if not exists (first time)
-            RecordingList[] recordingLists;
             if (candidate.RecordingLists.Count == 0)
             {
-                recordingLists = GenerateRecordingList(candidate);
+                GenerateRecordingList(candidate);
             }
 
             var recordingDTO = _context.RecordingLists
                                 .Include(recordingLists => recordingLists.Recording.QuestionGroups)
+                                .OrderBy(item => item.Recording.Part)
                                 .ToArray();
 
             return RecordingToDTO(recordingDTO);
@@ -156,8 +156,10 @@ namespace BACS3403_Project.Controllers
             return _context.RecordingLists.Any(e => e.CandidateID == id);
         }
 
-        private static RecordingDTO[] RecordingToDTO(RecordingList[] recordingList)
+        private RecordingDTO[] RecordingToDTO(RecordingList[] recordingList)
         {
+            // Get the current domain name
+            var domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
             RecordingDTO[] recordingDTO = new RecordingDTO[recordingList.Length];
 
             for (int i = 0; i < recordingList.Length; i++)
@@ -173,8 +175,7 @@ namespace BACS3403_Project.Controllers
                         QuestionNoStart = source.QuestionNoStart,
                         QuestionNoEnd = source.QuestionNoEnd,
                         QuestionGroupId = source.QuestionGroupId,
-                        //TODO send the file
-                        QuestionGroupURL = source.QuestionGroupURL,
+                        QuestionGroupURL = domainName + '/' + source.QuestionGroupURL,
                         TaskType = source.TaskType,
                     };
                 }
@@ -184,9 +185,7 @@ namespace BACS3403_Project.Controllers
                     RecordingId = item.RecordingId,
                     Title = item.Title,
                     Part = item.Part,
-                    //TODO send the audio
-                    AudioURL = item.AudioURL,
-                    ExaminerID = item.ExaminerID,
+                    AudioURL = domainName + "/Storage/AudioRecordings/Part" + item.Part + "/" + item.AudioURL,
                     QuestionGroups = questiongroupDTO,
                 };
             }
@@ -202,8 +201,6 @@ public class RecordingDTO
     public string Title { get; set; }
     public int Part { get; set; }
     public string AudioURL { get; set; }
-    public bool Available { get; set; }
-    public string ExaminerID { get; set; }
 
     public ICollection<QuestionGroupDTO> QuestionGroups { get; set; }
 }
