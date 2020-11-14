@@ -1,3 +1,4 @@
+-- INSERT RECORDING --
 DBCC CHECKIDENT ('[Recording]', RESEED, 0);
 GO
 
@@ -21,7 +22,7 @@ INSERT INTO [dbo].[Recording] ([RecordingId], [Part], [AudioURL], [Available], [
 SET IDENTITY_INSERT [dbo].[Recording] OFF
 
 
-
+-- INSERT QUESTIONGROUP --
 DBCC CHECKIDENT ('[QuestionGroup]', RESEED, 0);
 GO
 
@@ -59,7 +60,7 @@ INSERT INTO [dbo].[QuestionGroup] ([QuestionGroupId], [TaskType], [QuestionGroup
 SET IDENTITY_INSERT [dbo].[QuestionGroup] OFF
 
 
-
+-- INSERT MARKSCHEME --
 DBCC CHECKIDENT ('[MarkScheme]', RESEED, 0);
 GO
 
@@ -227,7 +228,214 @@ INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [QuestionGrou
 INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [QuestionGroupID]) VALUES (1158, 38, N'oil', 1030)
 INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [QuestionGroupID]) VALUES (1159, 39, N'waste', 1030)
 INSERT INTO [dbo].[MarkScheme] ([MarkSchemeID], [Index], [Answer], [QuestionGroupID]) VALUES (1160, 40, N'tests', 1030)
-
-
 SET IDENTITY_INSERT [dbo].[MarkScheme] OFF
 
+-- INSERT TEST -- 
+DBCC CHECKIDENT ('[Test]', RESEED, 0);
+GO
+
+SET IDENTITY_INSERT [dbo].[Test] ON
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1001, N'British Council Kuala Lumpur', N'2020-12-18 11:00:00', N'2020-12-18 11:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1002, N'British Council Kuala Lumpur', N'2020-12-18 13:00:00', N'2020-12-18 13:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1003, N'British Council Kuala Lumpur', N'2020-12-18 15:00:00', N'2020-12-18 15:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1004, N'British Council Kuala Lumpur', N'2020-12-19 09:00:00', N'2020-12-19 09:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1005, N'British Council Kuala Lumpur', N'2020-12-19 11:00:00', N'2020-12-19 11:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1006, N'British Council Kuala Lumpur', N'2020-12-19 13:00:00', N'2020-12-19 13:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1007, N'British Council Kuala Lumpur', N'2020-12-19 15:00:00', N'2020-12-19 15:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1008, N'British Council Kuala Lumpur', N'2020-12-25 11:00:00', N'2020-12-25 11:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1009, N'British Council Kuala Lumpur', N'2020-12-25 13:00:00', N'2020-12-25 13:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1010, N'British Council Examination Hall, Jalan Ampang, KL', N'2020-12-19 11:00:00', N'2020-12-19 11:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1011, N'British Council Examination Hall, Jalan Ampang, KL', N'2020-12-19 13:00:00', N'2020-12-19 13:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1012, N'British Council Examination Hall, Jalan Ampang, KL', N'2020-12-19 15:00:00', N'2020-12-19 15:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1013, N'Iversion Associates (Guidance View) @ Mid Valley City', N'2020-12-20 09:00:00', N'2020-12-20 09:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1014, N'Iversion Associates (Guidance View) @ Mid Valley City', N'2020-12-20 11:00:00', N'2020-12-20 11:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1015, N'Iversion Associates (Guidance View) @ Mid Valley City', N'2020-12-20 13:00:00', N'2020-12-20 13:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1016, N'iSpace @ Taman Tun Dr Ismail, KL', N'2020-12-21 09:00:00', N'2020-12-21 09:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1017, N'Holiday Villa Subang @ Subang Jaya', N'2020-12-22 13:00:00', N'2020-12-22 13:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1018, N'Sunway College Johor Bahru', N'2020-12-23 13:00:00', N'2020-12-23 13:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1019, N'Sentral College Penang', N'2020-12-24 15:00:00', N'2020-12-24 15:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1020, N'Kinta Riverfront Hotel & Suites, Ipoh', N'2020-12-25 15:00:00', N'2020-12-25 15:00:00')
+INSERT INTO [dbo].[Test] ([TestID], [Venue], [Date], [Time]) VALUES (1021, N'International College of Yayasan Melaka (ICYM)', N'2020-12-26 15:00:00', N'2020-12-26 15:00:00')
+SET IDENTITY_INSERT [dbo].[Test] OFF
+
+
+
+-- INSERT CANDIDATES -- 
+DBCC CHECKIDENT ('[Candidate]', RESEED, 0);
+GO
+
+SET IDENTITY_INSERT [dbo].[Candidate] ON
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1001, N'Lee Pey Keu', N'711340', N'~/Path', N'971021080164', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1002, N'Zhong Hook Pei', N'994133', N'~/Path', N'969192756141', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1003, N'Mohammad Amaanullah Hamid', N'851633', N'~/Path', N'920386127434', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1004, N'Yang Fee Whey', N'397740', N'~/Path', N'914083549690', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1005, N'Nur Danish Zaiminuddin', N'833680', N'~/Path', N'997804922725', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1006, N'Muhammed Nik Hisammudin', N'313633', N'~/Path', N'998333533241', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1007, N'Shanti Sundram', N'350632', N'~/Path', N'958077872126', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1008, N'Kong Siou Lan', N'994505', N'~/Path', N'966284789334', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1009, N'Yeo Mum Liem', N'114012', N'~/Path', N'986060316086', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1010, N'Lai Xiao Moon', N'874816', N'~/Path', N'962849240382', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1011, N'Choong Min Fei', N'535215', N'~/Path', N'915708692133', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1012, N'Cham Hiong Fuk', N'237165', N'~/Path', N'969055641065', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1013, N'Wu Rong Shui', N'755294', N'~/Path', N'911138508328', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1014, N'Renuga a/l Rakesh', N'787096', N'~/Path', N'967339631322', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1015, N'Ngu Kong Moo', N'755767', N'~/Path', N'929420813280', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1016, N'Toh Na Ching', N'720491', N'~/Path', N'941831568316', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1017, N'Muhammet Hj Nasir Asmar', N'299864', N'~/Path', N'996079120104', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1018, N'Shanthi a/l Baltej Mahathevan', N'384702', N'~/Path', N'999595905342', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1019, N'Liao Hang Fam', N'797386', N'~/Path', N'925439157637', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1020, N'Jason Teh Lat Kho', N'631056', N'~/Path', N'965303972844', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1021, N'Muhammad Jafree bin Che Ramly', N'667793', N'~/Path', N'993135503793', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1022, N'Mak Thong Rin', N'931832', N'~/Path', N'960861483778', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1023, N'Mohamad Baharin Fitri', N'214399', N'~/Path', N'983970807153', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1024, N'Chang Hen Choi ', N'359456', N'~/Path', N'925601116764', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1025, N'Roger Ngan Bee Suo', N'919776', N'~/Path', N'999086104359', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1026, N'Jessie Mak Khor Sin', N'164688', N'~/Path', N'991479239693', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1027, N'Sam Kean Kim', N'938421', N'~/Path', N'977666040476', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1028, N'Liew Ban Mai', N'429722', N'~/Path', N'939732265578', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1029, N'Ooi Chua May', N'140209', N'~/Path', N'991934328650', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1030, N'Chung Loi Leng', N'442269', N'~/Path', N'946981587450', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1031, N'Chris Qu Tay Shuo', N'847508', N'~/Path', N'921096102204', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1032, N'Arul Nadarajah', N'139161', N'~/Path', N'960696002518', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1033, N'Chou Gan Cho', N'893480', N'~/Path', N'966414549816', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1034, N'Melissa Kwong Chua Thia', N'999411', N'~/Path', N'998502152398', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1035, N'Muhamed Nik Salleh bin Mahadhir', N'800062', N'~/Path', N'929685623583', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1036, N'Liong Xing Koh', N'343731', N'~/Path', N'969258532918', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1037, N'Kar Hui Leow', N'455410', N'~/Path', N'975068674939', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1038, N'Zulhakimi bin Hammani', N'882738', N'~/Path', N'958664938021', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1039, N'Muhammed Hj Amierul bin Norhisam', N'243859', N'~/Path', N'996271392815', 1001, N'Present', N'N/A')
+INSERT INTO [dbo].[Candidate] ([CandidateID], [Name], [Token], [RecentPicture], [IdentificationCard], [TestID], [Status], [Grade]) VALUES (1040, N'Chew Yung Zen', N'581610', N'~/Path', N'970624297163', 1001, N'Present', N'N/A')
+SET IDENTITY_INSERT [dbo].[Candidate] OFF
+
+
+
+-- INSERT RECORDING --
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1001, 1001)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1001, 1010)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1001, 1007)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1001, 1008)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1002, 1001)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1002, 1010)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1002, 1003)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1002, 1016)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1003, 1013)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1003, 1006)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1003, 1003)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1003, 1016)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1004, 1001)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1004, 1006)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1004, 1003)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1004, 1004)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1005, 1013)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1005, 1002)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1005, 1007)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1005, 1008)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1006, 1005)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1006, 1010)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1006, 1015)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1006, 1008)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1007, 1001)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1007, 1006)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1007, 1011)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1007, 1004)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1008, 1005)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1008, 1006)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1008, 1007)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1008, 1016)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1009, 1001)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1009, 1014)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1009, 1003)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1009, 1016)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1010, 1013)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1010, 1014)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1010, 1007)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1010, 1004)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1011, 1005)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1011, 1010)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1011, 1007)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1011, 1016)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1012, 1001)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1012, 1010)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1012, 1003)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1012, 1012)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1013, 1013)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1013, 1006)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1013, 1007)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1013, 1012)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1014, 1005)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1014, 1010)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1014, 1015)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1014, 1016)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1015, 1009)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1015, 1010)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1015, 1007)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1015, 1012)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1016, 1005)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1016, 1006)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1016, 1011)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1016, 1012)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1017, 1001)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1017, 1014)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1017, 1003)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1017, 1012)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1018, 1005)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1018, 1002)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1018, 1015)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1018, 1008)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1019, 1001)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1019, 1002)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1019, 1007)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1019, 1012)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1020, 1009)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1020, 1014)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1020, 1015)
+INSERT INTO [dbo].[RecordingList] ([CandidateID], [RecordingID]) VALUES (1020, 1012)
+
+
+
+-- INSERT ANSWERS -- 
+DBCC CHECKIDENT ('[Answer]', RESEED, 0);
+GO
+
+SET IDENTITY_INSERT [dbo].[Answer] ON
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1001, 1, N'Ardleigh', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1002, 2, N'newspaper', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1003, 3, N'theme', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1004, 4, N'tent', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1005, 5, N'castle', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1006, 6, N'beach/beaches', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1007, 7, N'2020', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1008, 8, N'flight', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1009, 9, N'429', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1010, 10, N'dinner', 1001, 1001, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1011, 11, N'C/E', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1012, 12, N'C/E', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1013, 13, N'B', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1014, 14, N'A', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1015, 15, N'C', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1016, 16, N'B', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1017, 17, N'C', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1018, 18, N'D', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1019, 19, N'D', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1020, 20, N'A', 1001, 1010, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1021, 21, N'В/C', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1022, 22, N'В/C', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1023, 23, N'B/E', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1024, 24, N'B/E', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1025, 25, N'A', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1026, 26, N'C', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1027, 27, N'C', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1028, 28, N'A', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1029, 29, N'B', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1030, 30, N'A', 1001, 1007, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1031, 31, N'competition', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1032, 32, N'global', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1033, 33, N'demand', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1034, 34, N'customers', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1035, 35, N'regulation', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1036, 36, N'project', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1037, 37, N'flexible', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1038, 38, N'leadership', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1039, 39, N'women', 1001, 1008, 1)
+INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1040, 40, N'self-employed', 1001, 1008, 1)
+SET IDENTITY_INSERT [dbo].[Answer] OFF
