@@ -39,7 +39,7 @@
 		<h5>Review Test Answers</h5>
 		<hr />
 		<div id="CandidatesDataTable">
-			@await Component.InvokeAsync("Grade")
+			@await Component.InvokeAsync("Grade", new { venue = "", date = "", time =  ""})
 		</div>
 	</div>
 </div>
@@ -91,6 +91,7 @@
 	<script>
 		$(document).ready(function () {
 
+			//init DataTable with no Empty values
 			$('#candidatesList').DataTable({
 				"scrollY": "350px",
 				"scrollCollapse": true,
@@ -103,11 +104,13 @@
 			})
 
 
+			//When search test details form on submit
 			$('#SubmitTestDetails').on('click', function () {
 				var _url = '@Url.Action("GetGradeViewComponent", "Grades")';
 				$.ajax({
 					type: "GET",
 					url: _url,
+					data: { TestVenue: $('#Venue').val(), TestDate: $('#Date').val(), TestSession: $('#Session').val() },
 					success: function (result) {
 						//Display data to the table
 						$("#CandidatesDataTable").html(result);
@@ -126,7 +129,6 @@
 							window.location = $(this).data("href");
 						});
 
-						@*console.log('is the code running?');*@
 					},
 				});
 

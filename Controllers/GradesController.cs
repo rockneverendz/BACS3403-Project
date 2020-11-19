@@ -109,9 +109,9 @@ namespace BACS3403_Project.Controllers
 			return Json(new SelectList(venueSessionVM, "VenueSessionValue", "VenueSessionName"));
 		}
 
-		public IActionResult GetGradeViewComponent()
+		public IActionResult GetGradeViewComponent(string TestVenue, string TestDate, string TestSession)
 		{
-			return ViewComponent("Grade");
+			return ViewComponent("Grade", new { venue = TestVenue, date = TestDate, time = TestSession });
 		}
 
 		[HttpPost]
