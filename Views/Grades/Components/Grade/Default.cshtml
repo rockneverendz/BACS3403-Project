@@ -1,0 +1,28 @@
+﻿@model IEnumerable<BACS3403_Project.ViewModels.CandidateGradesViewModel>
+
+<table id="candidatesList" class="table table-hover table-bordered" style="width:100%">
+	<thead class="table-sm table-secondary justify-content-center">
+		<tr>
+			<th>#No</th>
+			<th>Candidate Number</th>
+			<th>Status</th>
+			<th>Total Marks</th>
+			<th>Grades</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr class="rowContent" data-href="CandidateAnswers?id=@(item.CandidateID)">
+				<td>@item.Index</td>
+				<td>@item.CandidateID</td>
+				<td>@item.Status</td>
+				<td>@item.TotalMarks</td>
+				<td>@item.Grade</td>
+			</tr>
+		}
+
+
+	</tbody>
+</table>
+
