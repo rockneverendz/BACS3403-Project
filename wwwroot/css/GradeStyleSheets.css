@@ -22,3 +22,7 @@
 #candidatesList{
 	font-size: 15px;
 }
+
+.table-hover tbody tr:hover {
+	cursor: pointer;
+}
