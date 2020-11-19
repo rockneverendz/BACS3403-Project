@@ -1,8 +1,10 @@
-﻿@{
+﻿@model BACS3403_Project.ViewModels.TestViewModel;
+
+@{
 	ViewData["Title"] = "Review Test Answers";
 }
 
-@section StyleSheets{ 
+@section StyleSheets{
 	<link href="~/css/GradeStyleSheets.css" rel="stylesheet" />
 }
 
@@ -13,145 +15,125 @@
 		<form action="/" method="post">
 			<div class="form-group">
 				<label for="exampleFormControlSelect1">Test Venue</label>
-				<select class="form-control">
-					<option selected>Select...</option>
+				<select asp-for="Venue" class="form-control"
+						asp-items="@(new SelectList(ViewBag.ListOfVenue, "VenueValue", "VenueName"))">
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect1">Date</label>
-				<select class="form-control">
-					<option selected>Select...</option>
+				<select asp-for="Date" class="form-control"
+						asp-items="@(new SelectList(string.Empty,"VenueDateValue","VenueDateName"))"
+						onchange="">
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlSelect1">Session</label>
-				<select class="form-control">
-					<option selected>Select...</option>
+				<select asp-for="Session" class="form-control"
+						asp-items="@(new SelectList(string.Empty,"VenueSessionValue","VenueSessionName"))">
 				</select>
 			</div>
-			<button type="button" class="btn btn-primary float-right">Search</button>
+			<button id="SubmitTestDetails" type="button" class="btn btn-primary float-right">Search</button>
 		</form>
 	</div>
 	<div class="gradeContent card overflow-auto col-9">
 		<h5>Review Test Answers</h5>
 		<hr />
-		<table id="candidatesList" class="table table-hover table-bordered" style="width:100%">
-			<thead class="table-sm table-secondary justify-content-center">
-				<tr>
-					<th>Name</th>
-					<th>Position</th>
-					<th>Start date</th>
-					<th>Salary</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Bruno Nash</td>
-					<td>Software Engineer</td>
-					<td>2011/05/03</td>
-					<td>$163,500</td>
-				</tr>
-				<tr>
-					<td>Sakura Yamamoto</td>
-					<td>Support Engineer</td>
-					<td>2009/08/19</td>
-					<td>$139,575</td>
-				</tr>
-				<tr>
-					<td>Thor Walton</td>
-					<td>Developer</td>
-					<td>2013/08/11</td>
-					<td>$98,540</td>
-				</tr>
-				<tr>
-					<td>Finn Camacho</td>
-					<td>Support Engineer</td>
-					<td>2009/07/07</td>
-					<td>$87,500</td>
-				</tr>
-				<tr>
-					<td>Serge Baldwin</td>
-					<td>Data Coordinator</td>
-					<td>2012/04/09</td>
-					<td>$138,575</td>
-				</tr>
-				<tr>
-					<td>Zenaida Frank</td>
-					<td>Software Engineer</td>
-					<td>2010/01/04</td>
-					<td>$125,250</td>
-				</tr>
-				<tr>
-					<td>Zorita Serrano</td>
-					<td>Software Engineer</td>
-					<td>2012/06/01</td>
-					<td>$115,000</td>
-				</tr>
-				<tr>
-					<td>Jennifer Acosta</td>
-					<td>Junior Javascript Developer</td>
-					<td>2013/02/01</td>
-					<td>$75,650</td>
-				</tr>
-				<tr>
-					<td>Cara Stevens</td>
-					<td>Sales Assistant</td>
-					<td>2011/12/06</td>
-					<td>$145,600</td>
-				</tr>
-				<tr>
-					<td>Hermione Butler</td>
-					<td>Regional Director</td>
-					<td>2011/03/21</td>
-					<td>$356,250</td>
-				</tr>
-				<tr>
-					<td>Lael Greer</td>
-					<td>Systems Administrator</td>
-					<td>2009/02/27</td>
-					<td>$103,500</td>
-				</tr>
-				<tr>
-					<td>Jonas Alexander</td>
-					<td>Developer</td>
-					<td>2010/07/14</td>
-					<td>$86,500</td>
-				</tr>
-				<tr>
-					<td>Shad Decker</td>
-					<td>Regional Director</td>
-					<td>2008/11/13</td>
-					<td>$183,000</td>
-				</tr>
-				<tr>
-					<td>Michael Bruce</td>
-					<td>Javascript Developer</td>
-					<td>2011/06/27</td>
-					<td>$183,000</td>
-				</tr>
-				<tr>
-					<td>Donna Snider</td>
-					<td>Customer Support</td>
-					<td>2011/01/25</td>
-					<td>$112,000</td>
-				</tr>
-			</tbody>
-		</table>
-
+		<div id="CandidatesDataTable">
+			@await Component.InvokeAsync("Grade")
+		</div>
 	</div>
 </div>
 
 @section Scripts {
 
 	<script src="~/lib/DataTables/datatables.min.js"></script>
+
 	<script>
 		$(document).ready(function () {
+			//Configure Cascading DropdownList Default Value "Select"
+			var items = "<option value='0'>Select</option>";
+			$('#Date').html(items);
+			$('#Session').html(items);
+
+			//Configure Cascading DropdownList  Select Input OnChange
+			$('#Venue').change(function () {
+				var url = '@Url.Content("~/")' + "Grades/GetTestDate";
+				var ddlsource = "#Venue";
+				$.getJSON(url, { Venue: $(ddlsource).val() }, function (data) {
+					var items = '';
+					$('#Date').empty();
+					$('#Session').empty();
+					$.each(data, function (i, date) {
+						items += "<option value='" + date.value + "'>" + date.text + "</option>";
+					});
+					$('#Date').html(items);
+					$('#Session').html("<option value='0'>Select</option>");
+				});
+			});
+
+			$('#Date').change(function () {
+				var url = '@Url.Content("~/")' + "Grades/GetTestSessions";
+				var ddlsource = "#Venue";
+				var ddlsource2 = "#Date";
+				$.getJSON(url, { Venue: $(ddlsource).val(), Date: $(ddlsource2).val() }, function (data) {
+					var items = '';
+					$('#Session').empty();
+					$.each(data, function (i, date) {
+						items += "<option value='" + date.value + "'>" + date.text + "</option>";
+					});
+					$('#Session').html(items);
+				});
+
+			});
+		});
+
+	</script>
+	<script>
+		$(document).ready(function () {
+
 			$('#candidatesList').DataTable({
 				"scrollY": "350px",
 				"scrollCollapse": true,
 				"paging": true,
 				"info": true,
 			});
+
+			$(".rowContent").on("click", function () {
+				window.location = $(this).data("href");
+			})
+
+
+			$('#SubmitTestDetails').on('click', function () {
+				var _url = '@Url.Action("GetGradeViewComponent", "Grades")';
+				$.ajax({
+					type: "GET",
+					url: _url,
+					success: function (result) {
+						//Display data to the table
+						$("#CandidatesDataTable").html(result);
+
+						//init DataTable
+						$('#candidatesList').DataTable({
+							"scrollY": "350px",
+							"scrollCollapse": true,
+							"paging": true,
+							"info": true,
+							"destroy": true,
+						});
+
+						//set clickable link on each row content
+						$(".rowContent").on("click", function () {
+							window.location = $(this).data("href");
+						});
+
+						@*console.log('is the code running?');*@
+					},
+				});
+
+			});
 		});
 	</script>
+
+
+
 }
