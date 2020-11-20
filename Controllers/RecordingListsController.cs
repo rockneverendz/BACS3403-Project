@@ -24,14 +24,14 @@ namespace BACS3403_Project.Controllers
 
         // POST: api/RecordingLists/CreateRecordingList
         [HttpPost("CreateRecordingList")]
-        public async Task<ActionResult<RecordingDTO[]>> CreateRecordingList(string token)
+        public async Task<ActionResult<RecordingDTO[]>> CreateRecordingList([FromBody] TokenDTO tokenDTO)
         {
-            if (token == null) return BadRequest();
+            if (tokenDTO == null) return BadRequest();
 
             // Get CandidateBy Token
             Candidate candidate = await _context.Candidates
                                         .Include(candidate => candidate.RecordingLists)
-                                        .FirstOrDefaultAsync(candidate => candidate.Token == token);
+                                        .FirstOrDefaultAsync(candidate => candidate.Token == tokenDTO.Token);
 
             // Generate list if not exists (first time)
             if (candidate.RecordingLists.Count == 0)
@@ -77,89 +77,8 @@ namespace BACS3403_Project.Controllers
             return recordpart;
         }
 
-        // PUT: api/RecordingLists/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRecordingList(int id, RecordingList recordingList)
-        {
-            if (id != recordingList.CandidateID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(recordingList).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RecordingListExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/RecordingLists
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<RecordingList>> PostRecordingList(RecordingList recordingList)
-        {
-            _context.RecordingLists.Add(recordingList);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (RecordingListExists(recordingList.CandidateID))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetRecordingList", new { id = recordingList.CandidateID }, recordingList);
-        }
-
-        // DELETE: api/RecordingLists/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<RecordingList>> DeleteRecordingList(int id)
-        {
-            var recordingList = await _context.RecordingLists.FindAsync(id);
-            if (recordingList == null)
-            {
-                return NotFound();
-            }
-
-            _context.RecordingLists.Remove(recordingList);
-            await _context.SaveChangesAsync();
-
-            return recordingList;
-        }
-
-        private bool RecordingListExists(int id)
-        {
-            return _context.RecordingLists.Any(e => e.CandidateID == id);
-        }
-
         private RecordingDTO[] RecordingToDTO(RecordingList[] recordingList)
         {
-            // Get the current domain name
-            var domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
             RecordingDTO[] recordingDTO = new RecordingDTO[recordingList.Length];
 
             for (int i = 0; i < recordingList.Length; i++)
@@ -175,7 +94,7 @@ namespace BACS3403_Project.Controllers
                         QuestionNoStart = source.QuestionNoStart,
                         QuestionNoEnd = source.QuestionNoEnd,
                         QuestionGroupId = source.QuestionGroupId,
-                        QuestionGroupURL = domainName + '/' + source.QuestionGroupURL,
+                        QuestionGroupURL = '/' + source.QuestionGroupURL,
                         TaskType = source.TaskType,
                     };
                 }
@@ -185,7 +104,7 @@ namespace BACS3403_Project.Controllers
                     RecordingId = item.RecordingId,
                     Title = item.Title,
                     Part = item.Part,
-                    AudioURL = domainName + "/Storage/AudioRecordings/Part" + item.Part + "/" + item.AudioURL,
+                    AudioURL = "/Storage/AudioRecordings/Part" + item.Part + "/" + item.AudioURL,
                     QuestionGroups = questiongroupDTO,
                 };
             }

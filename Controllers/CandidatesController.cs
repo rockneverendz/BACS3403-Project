@@ -35,11 +35,11 @@ namespace BACS3403_Project.Controllers
             _faceClient.Endpoint = endpoint;
         }
 
-        // GET: api/Candidates/RedeemToken
-        [HttpGet("RedeemToken")]
-        public async Task<ActionResult<Candidate>> RedeemToken(string token)
+        // Post: api/Candidates/RedeemToken
+        [HttpPost("RedeemToken")]
+        public async Task<ActionResult<Candidate>> RedeemToken([FromBody] TokenDTO tokenDTO)
         {
-            Candidate candidate = await GetCandidateByToken(token);
+            Candidate candidate = await GetCandidateByToken(tokenDTO.Token);
 
             if (candidate == null)
             {
@@ -173,4 +173,9 @@ namespace BACS3403_Project.Controllers
         [Required]
         public IFormFile Face { get; set; }
     }
+}
+
+public class TokenDTO
+{
+    public string Token { get; set; }
 }
