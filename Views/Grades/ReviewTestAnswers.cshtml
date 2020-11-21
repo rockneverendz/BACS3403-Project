@@ -1,0 +1,141 @@
+﻿@model BACS3403_Project.ViewModels.TestViewModel;
+
+@{
+	ViewData["Title"] = "Review Test Answers";
+}
+
+@section StyleSheets{
+	<link href="~/css/GradeStyleSheets.css" rel="stylesheet" />
+}
+
+<div class="row">
+	<div class="gradeSearch card col-3 p-3">
+		<h5>Select a test</h5>
+		<hr />
+		<form action="/" method="post">
+			<div class="form-group">
+				<label for="exampleFormControlSelect1">Test Venue</label>
+				<select asp-for="Venue" class="form-control"
+						asp-items="@(new SelectList(ViewBag.ListOfVenue, "VenueValue", "VenueName"))">
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="exampleFormControlSelect1">Date</label>
+				<select asp-for="Date" class="form-control"
+						asp-items="@(new SelectList(string.Empty,"VenueDateValue","VenueDateName"))"
+						onchange="">
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="exampleFormControlSelect1">Session</label>
+				<select asp-for="Session" class="form-control"
+						asp-items="@(new SelectList(string.Empty,"VenueSessionValue","VenueSessionName"))">
+				</select>
+			</div>
+			<button id="SubmitTestDetails" type="button" class="btn btn-primary float-right">Search</button>
+		</form>
+	</div>
+	<div class="gradeContent card overflow-auto col-9">
+		<h5>Review Test Answers</h5>
+		<hr />
+		<div id="CandidatesDataTable">
+			@await Component.InvokeAsync("Grade", new { venue = "", date = "", time =  ""})
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+
+	<script src="~/lib/DataTables/datatables.min.js"></script>
+
+	<script>
+		$(document).ready(function () {
+			//Configure Cascading DropdownList Default Value "Select"
+			var items = "<option value='0'>Select</option>";
+			$('#Date').html(items);
+			$('#Session').html(items);
+
+			//Configure Cascading DropdownList  Select Input OnChange
+			$('#Venue').change(function () {
+				var url = '@Url.Content("~/")' + "Grades/GetTestDate";
+				var ddlsource = "#Venue";
+				$.getJSON(url, { Venue: $(ddlsource).val() }, function (data) {
+					var items = '';
+					$('#Date').empty();
+					$('#Session').empty();
+					$.each(data, function (i, date) {
+						items += "<option value='" + date.value + "'>" + date.text + "</option>";
+					});
+					$('#Date').html(items);
+					$('#Session').html("<option value='0'>Select</option>");
+				});
+			});
+
+			$('#Date').change(function () {
+				var url = '@Url.Content("~/")' + "Grades/GetTestSessions";
+				var ddlsource = "#Venue";
+				var ddlsource2 = "#Date";
+				$.getJSON(url, { Venue: $(ddlsource).val(), Date: $(ddlsource2).val() }, function (data) {
+					var items = '';
+					$('#Session').empty();
+					$.each(data, function (i, date) {
+						items += "<option value='" + date.value + "'>" + date.text + "</option>";
+					});
+					$('#Session').html(items);
+				});
+
+			});
+		});
+
+	</script>
+	<script>
+		$(document).ready(function () {
+
+			//init DataTable with no Empty values
+			$('#candidatesList').DataTable({
+				"scrollY": "350px",
+				"scrollCollapse": true,
+				"paging": true,
+				"info": true,
+			});
+
+			$(".rowContent").on("click", function () {
+				window.location = $(this).data("href");
+			})
+
+
+			//When search test details form on submit
+			$('#SubmitTestDetails').on('click', function () {
+				var _url = '@Url.Action("GetGradeViewComponent", "Grades")';
+				$.ajax({
+					type: "GET",
+					url: _url,
+					data: { TestVenue: $('#Venue').val(), TestDate: $('#Date').val(), TestSession: $('#Session').val() },
+					success: function (result) {
+						//Display data to the table
+						$("#CandidatesDataTable").html(result);
+
+						//init DataTable
+						$('#candidatesList').DataTable({
+							"scrollY": "350px",
+							"scrollCollapse": true,
+							"paging": true,
+							"info": true,
+							"destroy": true,
+						});
+
+						//set clickable link on each row content
+						$(".rowContent").on("click", function () {
+							window.location = $(this).data("href");
+						});
+
+					},
+				});
+
+			});
+		});
+	</script>
+
+
+
+}

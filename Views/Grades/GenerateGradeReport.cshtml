@@ -1,0 +1,52 @@
+﻿@{ 
+	ViewData["Title"] = "Grade Report";
+}
+	<h4>Grade Report</h4>
+	
+	<div class="row">
+		<div class="tab card col-3 p-3">
+			<h5>Select a test</h5>
+			<hr />
+			<form action="/" method="post">
+				<div class="form-group">
+					<label for="exampleFormControlSelect1">Test Venue</label>
+					<select class="form-control">
+						<option selected>Select...</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="exampleFormControlSelect1">Date</label>
+					<select class="form-control">
+						<option selected>Select...</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="exampleFormControlSelect1">Session</label>
+					<select class="form-control">
+						<option selected>Select...</option>
+					</select>
+				</div>
+				<button type="button" class="btn btn-primary float-right">Search</button>
+			</form>
+		</div>
+		<div class="tabcontent card overflow-auto col-9">
+			<div class="d-flex">
+				<div class="p-2">
+					<h4>Generate Grades Report</h4>
+				</div>
+				<div class="p-2 ml-auto">
+					<button class="btn btn-primary">Print</button>
+				</div>
+				
+				
+			</div>
+			<hr />
+			
+
+
+		</div>
+	</div>
+
+
+@{
+}

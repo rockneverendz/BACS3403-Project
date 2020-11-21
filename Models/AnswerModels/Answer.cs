@@ -5,6 +5,7 @@
         public int AnswerID { get; set; }
         public int Index { get; set; }
         public string WrittenAnswer { get; set; }
+        public bool Correctness { get; set; }
         public int CandidateID { get; set; }
         public int RecordingID { get; set; }
 

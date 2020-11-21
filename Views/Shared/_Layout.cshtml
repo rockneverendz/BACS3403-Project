@@ -5,7 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - IELST Listening</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/lib/DataTables/datatables.min.css" />
 	<link rel="stylesheet" href="~/css/Layout.css">
+	@RenderSection("StyleSheets", required: false)
 
 	<!-- Font Awsome -->
 	<script src="https://kit.fontawesome.com/0bcbba3f41.js" crossorigin="anonymous"></script>
@@ -38,10 +40,10 @@
 					</a>
 					<ul class="collapse list-unstyled" id="adminSubmenu">
 						<li>
-							<a href="#">Generate Seat Number</a>
+							<a asp-controller="TestAdmin" asp-action="GenerateSeatNumber">Generate Seat Number</a>
 						</li>
 						<li>
-							<a href="#">View Attandance</a>
+							<a asp-controller="TestAdmin" asp-action="ViewAttendance">View Attandance</a>
 						</li>
 					</ul>
 				</li>
@@ -52,10 +54,10 @@
 					</a>
 					<ul class="collapse list-unstyled" id="gradeSubmenu">
 						<li>
-							<a href="#">Review Test Answers</a>
+							<a asp-controller="Grades" asp-action="ReviewTestAnswers">Review Test Answers</a>
 						</li>
 						<li>
-							<a href="#">Generate Grade Report</a>
+							<a asp-controller="Grades" asp-action="GenerateGradeReport">Generate Grade Report</a>
 						</li>
 					</ul>
 				</li>
@@ -78,10 +80,6 @@
 						<i class="fas fa-bars"></i>
 					</button>
 					<a class="h4 ml-0 mb-0 ">Examiner Portal</a>
-					<span class="navbar-text mb-0">
-						<i class="fas fa-user-circle h4"></i>
-						Username
-					</span>
 					<partial name="_LoginPartial" />
 				</div>
 			</nav>
