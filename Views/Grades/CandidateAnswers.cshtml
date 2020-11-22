@@ -1,7 +1,117 @@
-﻿@*
-	For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model BACS3403_Project.ViewModels.CandidateAnswersViewModel
+
 @{
+	ViewData["Title"] = "Candidate's Test Answers";
+	string tempData = TempData["Status"] as string;
 }
 
-<p>Here is the particular Candidate Test Answers Page @ViewData["CandidateID"]</p>
+@if (tempData != null)
+{
+	<div class="alert @(tempData.Equals("warning") ? "alert-warning" : "alert-info") mt-0" role="alert" id="successalert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		@TempData["StatusMessage"]
+	</div>
+}
+
+
+<div class="row justify-content-between">
+	<div class="col-8"><h5>Review Test Answers - Candidate @Model.CandidateID </h5></div>
+	<div class="col-4"><h5>Total Marks: @Model.TotalMarks Grade: @Model.Grade</h5></div>
+</div>
+<hr class="mt-1" />
+
+
+<div class="tab card">
+	<a id="defaultOpen" class="tablinks" onclick="openTestAnsPart(this, 'Part1')">
+		<h5 class="mb-0">Part 1</h5>
+	</a>
+	<a class="tablinks" onclick="openTestAnsPart(this, 'Part2')">
+		<h5 class="mb-0">Part 2</h5>
+	</a>
+	<a class="tablinks" onclick="openTestAnsPart(this, 'Part3')">
+		<h5 class="mb-0">Part 3</h5>
+	</a>
+	<a class="tablinks" onclick="openTestAnsPart(this, 'Part4')">
+		<h5 class="mb-0">Part 4</h5>
+	</a>
+</div>
+
+
+@foreach (var recordingPart in Model.AnswersByPart)
+{
+	<div id="Part@(recordingPart.Part)" class="tabcontent card overflow-auto">
+		<div class="row">
+			<h5>Recording: @recordingPart.RecordingID - Title: @recordingPart.Title</h5>
+		</div>
+		<hr class="mt-1" />
+		<table class="table table-borderless">
+			<thead>
+				<tr>
+					<th scope="col">No.</th>
+					<th scope="col">Answers</th>
+					<th scope="col"></th>
+					<th scope="col">Marking Scheme</th>
+					<th scope="col">Mark Question</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var ansWifMs in recordingPart.AnswersWithMarkScheme)
+				{
+					<tr>
+						<th scope="row">@ansWifMs.Index</th>
+						<td class="pt-1">
+							<input type="text" class="form-control-plaintext border rounded"
+								   value="@(ansWifMs.WrittenAnswer)" readonly>
+						</td>
+						<td>
+							<i class="fa  fa-lg @(ansWifMs.Correctness == true ? "fa-check text-success": "fa-times text-danger")"
+							   aria-hidden="true"></i>
+						</td>
+						<td class="pt-1">
+							<input type="text" class="form-control-plaintext" value="@(ansWifMs.MarkSchemeAnswer)" readonly>
+						</td>
+						<td>
+							<form id="ansForm@(ansWifMs.Index)" method="post"
+								  asp-action="UpdateAns"
+								  asp-route-AnsID="@(ansWifMs.AnswerID)"
+								  asp-route-CandID="@(Model.CandidateID)">
+								<a class="updateAns" onclick="document.getElementById('ansForm@(ansWifMs.Index)').submit()">
+									<i class="fa fa-pencil fa-lg text-primary pl-5" aria-hidden="true"></i>
+								</a>
+							</form>
+						</td>
+					</tr>
+				}
+
+			</tbody>
+		</table>
+	</div>
+}
+
+<hr />
+
+@section Scripts {
+	<script>
+		function openTestAnsPart(evt, part) {
+
+			$('.tabcontent').each(function (i, obj) {
+				$(this).css('display', 'none');
+			});
+
+			$('.tablinks').each(function (i, obj) {
+				$(this).removeClass('active');
+			});
+
+			$('#' + part).css('display', 'block');
+			$(evt).addClass('active');
+
+		}
+		$('#defaultOpen').click();
+		$('.updateAns').css('cursor', 'pointer');
+
+	</script>
+
+
+}

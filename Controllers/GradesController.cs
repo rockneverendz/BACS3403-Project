@@ -114,23 +114,155 @@ namespace BACS3403_Project.Controllers
 			return ViewComponent("Grade", new { venue = TestVenue, date = TestDate, time = TestSession });
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> ReviewTestAnswers(int? id)
+		public async Task<IActionResult> CandidateAnswers(int? id)
 		{
-			//RECEIVED DATA AND REDIRECT TO CANDIDATES ANSWERS
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-			return View();
+			var answers = await _context.Candidates
+						.Include(c => c.RecordingLists)
+						.ThenInclude(rl => rl.Answers)
+						.FirstOrDefaultAsync(c => c.CandidateID == id);
+
+
+			/*	var markScheme = await _context.Candidates
+								.Include(c => c.RecordingLists)
+								.ThenInclude(rl => rl.Recording)
+								.ThenInclude(r => r.QuestionGroups)
+								.ThenInclude(qg => qg.MarkSchemes)
+								.FirstOrDefaultAsync(c => c.CandidateID == id);*/
+
+			var markScheme = from ms in _context.MarkSchemes
+						  join q in _context.Questions on ms.QuestionGroupID equals q.QuestionGroupId
+						  join r in _context.Recordings on q.RecordingID equals r.RecordingId
+						  from c in _context.Candidates
+						  join rl in _context.RecordingLists
+							on new { r.RecordingId, c.CandidateID }
+							equals new { RecordingId = rl.RecordingID, rl.CandidateID }
+							into details
+						  from d in details
+						  where c.CandidateID == id
+						  group new { ms.MarkSchemeID, ms.Index, ms.Answer }
+						  by new { ms.MarkSchemeID, ms.Index, ms.Answer } into grp
+						  orderby grp.Key.Index
+						  select new
+						  {
+							  grp.Key.MarkSchemeID,
+							  grp.Key.Index,
+							  grp.Key.Answer
+						  };
+
+		  /*
+		   *	select ms."Index", ms.Answer
+		   *	from Candidate c, RecordingList rl, Recording r, QuestionGroup qg, MarkScheme ms
+		   *	where c.CandidateID = rl.CandidateID AND
+		   *			rl.RecordingID = r.RecordingId AND
+		   *			r.RecordingId = qg.RecordingID AND
+		   *			qg.QuestionGroupId = ms.QuestionGroupID AND
+		   *			c.CandidateID = 1001
+		   */
+
+			List<MsList> actualAnsList = new List<MsList>();
+			/// This block is to set the written and actual ans together a.k.a set MarkScheme Answer
+			/// 
+
+			foreach (var item in markScheme)
+			{
+				var ms = new MsList
+				{
+					Key = item.Index,
+					Ans = item.Answer
+				};
+				actualAnsList.Add(ms);
+			}
+
+			//Sort the markscheme list accroding to the question Index
+			List<MsList> sortedAnsList = actualAnsList.OrderBy(a => a.Key).ToList();
+
+			//Relocate Data to View Model
+			var candAnsViewModel = new CandidateAnswersViewModel
+			{
+				CandidateID = answers.CandidateID,
+				TotalMarks = 0,
+				Grade = answers.Grade
+			};
+			var ansByPartList = new List<AnswersByPartViewModel>();
+
+			foreach (var recording in answers.RecordingLists)
+			{
+				var getRecordingDetails = _context.Recordings.Find(recording.RecordingID);
+
+				var ansByPart = new AnswersByPartViewModel
+				{
+					RecordingID = getRecordingDetails.RecordingId,
+					Title = getRecordingDetails.Title,
+					Part = getRecordingDetails.Part
+				};
+
+				var ansWifMSList = new List<AnswersWithMarkSchemeViewModel>();
+
+				foreach (var ans in recording.Answers)
+				{
+					var ansWithMarkScheme = new AnswersWithMarkSchemeViewModel
+					{
+						AnswerID = ans.AnswerID,
+						Index = ans.Index,
+						WrittenAnswer = ans.WrittenAnswer,
+						Correctness = ans.Correctness,
+						MarkSchemeAnswer = sortedAnsList[ans.Index - 1].Ans
+					};
+
+					//To Add the list of object of AnsWithMarkScheme with each interation
+					ansWifMSList.Add(ansWithMarkScheme);
+				}
+
+				ansByPart.AnswersWithMarkScheme = ansWifMSList;
+
+				//To Add the list of object of AnsByPart interation
+				ansByPartList.Add(ansByPart);
+			}
+
+			candAnsViewModel.AnswersByPart = ansByPartList;
+
+			return View(candAnsViewModel);
 		}
 
-		public IActionResult CandidateAnswers(int? id)
+		[HttpPost, ActionName("UpdateAns")]
+		public async Task<IActionResult> UpdateCandidatesAnswer(int AnsID, int CandID)
 		{
-			ViewData["CandidateID"] = id;
-			return View();
+			var ans = await _context.Answers.FindAsync(AnsID);
+
+			if (ans.Correctness)
+			{
+				ans.Correctness = false;
+				TempData["StatusMessage"] = "Question " + ans.Index +
+											" has been mark as wrong";
+				TempData["Status"] = "warning";
+			}
+			else
+			{
+				ans.Correctness = true;
+				TempData["StatusMessage"] = "Question " + ans.Index +
+											" has been mark as correct";
+				TempData["Status"] = "info";
+			}
+
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction("CandidateAnswers", new { id = CandID });
 		}
 
 		public IActionResult GenerateGradeReport()
 		{
 			return View();
+		}
+
+		private class MsList
+		{
+			public int Key { get; set; }
+			public string Ans { get; set; }
 		}
 
 
