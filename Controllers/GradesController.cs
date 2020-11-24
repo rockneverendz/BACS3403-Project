@@ -121,19 +121,13 @@ namespace BACS3403_Project.Controllers
 				return NotFound();
 			}
 
+			//Get Candidates Answers
 			var answers = await _context.Candidates
 						.Include(c => c.RecordingLists)
 						.ThenInclude(rl => rl.Answers)
 						.FirstOrDefaultAsync(c => c.CandidateID == id);
 
-
-			/*	var markScheme = await _context.Candidates
-								.Include(c => c.RecordingLists)
-								.ThenInclude(rl => rl.Recording)
-								.ThenInclude(r => r.QuestionGroups)
-								.ThenInclude(qg => qg.MarkSchemes)
-								.FirstOrDefaultAsync(c => c.CandidateID == id);*/
-
+			//Get Test Mark Scheme
 			var markScheme = from ms in _context.MarkSchemes
 						  join q in _context.Questions on ms.QuestionGroupID equals q.QuestionGroupId
 						  join r in _context.Recordings on q.RecordingID equals r.RecordingId
@@ -154,20 +148,13 @@ namespace BACS3403_Project.Controllers
 							  grp.Key.Answer
 						  };
 
-		  /*
-		   *	select ms."Index", ms.Answer
-		   *	from Candidate c, RecordingList rl, Recording r, QuestionGroup qg, MarkScheme ms
-		   *	where c.CandidateID = rl.CandidateID AND
-		   *			rl.RecordingID = r.RecordingId AND
-		   *			r.RecordingId = qg.RecordingID AND
-		   *			qg.QuestionGroupId = ms.QuestionGroupID AND
-		   *			c.CandidateID = 1001
-		   */
-
+			//Get Test Total Mark
+			var totalMark = _context.Answers
+							.Where(a => a.Correctness == true)
+							.Where(a => a.CandidateID == id).Count();
+							
+			// This block is to set the written and actual ans together a.k.a set MarkScheme Answer
 			List<MsList> actualAnsList = new List<MsList>();
-			/// This block is to set the written and actual ans together a.k.a set MarkScheme Answer
-			/// 
-
 			foreach (var item in markScheme)
 			{
 				var ms = new MsList
@@ -177,15 +164,13 @@ namespace BACS3403_Project.Controllers
 				};
 				actualAnsList.Add(ms);
 			}
-
-			//Sort the markscheme list accroding to the question Index
-			List<MsList> sortedAnsList = actualAnsList.OrderBy(a => a.Key).ToList();
+			List<MsList> sortedAnsList = actualAnsList.OrderBy(a => a.Key).ToList();  //Sort list accroding to the question Index
 
 			//Relocate Data to View Model
 			var candAnsViewModel = new CandidateAnswersViewModel
 			{
 				CandidateID = answers.CandidateID,
-				TotalMarks = 0,
+				TotalMarks = totalMark,
 				Grade = answers.Grade
 			};
 			var ansByPartList = new List<AnswersByPartViewModel>();
@@ -214,13 +199,13 @@ namespace BACS3403_Project.Controllers
 						MarkSchemeAnswer = sortedAnsList[ans.Index - 1].Ans
 					};
 
-					//To Add the list of object of AnsWithMarkScheme with each interation
+					//To Add the list of object of AnsWithMarkScheme with each iteration
 					ansWifMSList.Add(ansWithMarkScheme);
 				}
 
 				ansByPart.AnswersWithMarkScheme = ansWifMSList;
 
-				//To Add the list of object of AnsByPart interation
+				//To Add the list of object of AnsByPart iteration
 				ansByPartList.Add(ansByPart);
 			}
 
@@ -256,7 +241,77 @@ namespace BACS3403_Project.Controllers
 
 		public IActionResult GenerateGradeReport()
 		{
+			//GET DATABASE DATA AND RETURN TO VIEW
+			int i = 0;
+			var result = (from tv in _context.Tests
+						  select tv.Venue).Distinct();
+
+			var venueList = result.ToList();
+
+			List<SelectVenueViewModel> venueVM = new List<SelectVenueViewModel>();
+			venueVM.Insert(i, new SelectVenueViewModel { VenueValue = "0", VenueName = "Select" });
+			i++;
+
+			foreach (var item in venueList)
+			{
+				venueVM.Insert(i, new SelectVenueViewModel { VenueValue = item, VenueName = item });
+				i++;
+			}
+
+			ViewBag.ListOfVenue = venueVM;
 			return View();
+		}
+
+		public IActionResult PrintGradeReport(string venue, string date, string time)
+		{
+			int i = 0;
+			var GradeReportVM= new PrintGradeReportViewModel();
+			List<CandidateGradesViewModel> candidateGrades = new List<CandidateGradesViewModel>();
+
+			if (venue != null && date != null && time != null)
+			{
+				var testing = (from ans in _context.Answers
+							   join rl in _context.RecordingLists
+									 on new { ans.CandidateID, ans.RecordingID } equals new { rl.CandidateID, rl.RecordingID }
+							   join cand in _context.Candidates on rl.CandidateID equals cand.CandidateID
+							   join test in _context.Tests on cand.TestID equals test.TestID
+							   where test.Venue == venue
+							   where test.Date.Date == DateTime.Parse(date).Date
+							   where test.Time.Hour == DateTime.Parse(time).Hour
+							   where ans.Correctness == true
+							   group new { cand.CandidateID, cand.Status, cand.Grade, ans.Correctness }
+							   by new { cand.CandidateID, cand.Status, cand.Grade, ans.Correctness } into grp
+							   select new
+							   {
+								   grp.Key.CandidateID,
+								   grp.Key.Status,
+								   grp.Key.Grade,
+								   count = grp.Count()
+							   });
+
+				foreach (var item in testing)
+				{
+					i++;
+					CandidateGradesViewModel cg = new CandidateGradesViewModel
+					{
+						Index = i,
+						CandidateID = item.CandidateID,
+						Status = item.Status,
+						TotalMarks = item.count,
+						Grade = item.Grade
+					};
+					candidateGrades.Add(cg);
+				}
+
+				GradeReportVM.Venue = venue;
+				GradeReportVM.Date = date;
+				GradeReportVM.Time = time;
+				GradeReportVM.CandidateGradesViewModels = candidateGrades;
+			}
+
+
+
+			return View(GradeReportVM);
 		}
 
 		private class MsList
