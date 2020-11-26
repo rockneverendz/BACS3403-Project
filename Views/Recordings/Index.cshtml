@@ -3,7 +3,7 @@
 
 @{
 	ViewData["Title"] = "Question Bank";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+
 	string tempData = TempData["Status"] as string;
 
 	var counterForModal = 1;
@@ -83,7 +83,7 @@
 					<div class="row">
 						<div class="col-1">
 							<form id="recForm@(counter)" asp-action="UpdateStatus" asp-route-id="@item.RecordingId" method="post">
-								<a onclick="document.getElementById('recForm@(counter)').submit()">
+								<a class="updateStatusLink" onclick="document.getElementById('recForm@(counter)').submit()">
 									@* If Availability is True == Success(Green) Else == Grey(Secondary)  *@
 									<i class="fa fa-check-circle fa-lg @(item.Available == true ? "text-success":"text-secondary")" aria-hidden="true"></i>
 								</a>
@@ -137,7 +137,7 @@
 							<p class="col-8 text-justify">
 								Are you sure you want to delete this recording? <br />
 								Recording ID: @item.RecordingId <br />
-								Title: @item.Title 
+								Title: @item.Title
 							</p>
 						</div>
 					</div>
@@ -165,3 +165,8 @@
 	}
 </div>
 
+@section Scripts {
+	<script>
+		$('.updateStatusLink').css('cursor', 'pointer');
+	</script>
+}

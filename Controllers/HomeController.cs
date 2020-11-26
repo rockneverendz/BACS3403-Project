@@ -20,7 +20,7 @@ namespace BACS3403_Project.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index","Recordings", new { part = 1});
         }
 
         public IActionResult Privacy()
