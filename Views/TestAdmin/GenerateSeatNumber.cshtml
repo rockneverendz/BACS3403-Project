@@ -1,8 +1,96 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model BACS3403_Project.ViewModels.TestViewModel;
+
+@{ 
+	ViewData["Title"] = "Candidate's Test Answers";
 }
 
-	<h4>Generate Seat Number</h4>
-	<hr />
+<div class="card">
+	<div class="card-body">
+		<div class="row justify-content-between mx-1">
+			<h5>Generate Seat Number</h5>
+			<h5>Today Date: @(DateTime.Now.ToString("dd MMMM yyyy"))</h5>
+		</div>
+		<hr class="mt-0" />
+
+
+		<form asp-action="PrintSeatQR" method="post">
+			<div class="col-6">
+				<div class="form-group">
+					<label for="exampleFormControlSelect1">Test Venue</label>
+					<select asp-for="Venue" class="form-control"
+							asp-items="@(new SelectList(ViewBag.ListOfVenue, "VenueValue", "VenueName"))">
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="exampleFormControlSelect1">Date</label>
+					<select asp-for="Date" class="form-control"
+							asp-items="@(new SelectList(string.Empty,"VenueDateValue","VenueDateName"))"
+							onchange="">
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="exampleFormControlSelect1">Session</label>
+					<select asp-for="Session" class="form-control"
+							asp-items="@(new SelectList(string.Empty,"VenueSessionValue","VenueSessionName"))">
+					</select>
+				</div>
+			</div>
+			<hr />
+			<div class="d-flex justify-content-center">
+				<button type="submit" class="btn btn-lg btn-primary">Generate Seat Number</button>
+			</div>
+
+		</form>
+		
+	</div>
+
+
+
+</div>
+
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			//Configure Cascading DropdownList Default Value "Select"
+			var items = "<option value='0'>Select</option>";
+			$('#Date').html(items);
+			$('#Session').html(items);
+
+			//Configure Cascading DropdownList  Select Input OnChange
+			$('#Venue').change(function () {
+				var url = '@Url.Content("~/")' + "Grades/GetTestDate";
+				var ddlsource = "#Venue";
+				$.getJSON(url, { Venue: $(ddlsource).val() }, function (data) {
+					var items = '';
+					$('#Date').empty();
+					$('#Session').empty();
+					$.each(data, function (i, date) {
+						items += "<option value='" + date.value + "'>" + date.text + "</option>";
+					});
+					$('#Date').html(items);
+					$('#Session').html("<option value='0'>Select</option>");
+				});
+			});
+
+			$('#Date').change(function () {
+				var url = '@Url.Content("~/")' + "Grades/GetTestSessions";
+				var ddlsource = "#Venue";
+				var ddlsource2 = "#Date";
+				$.getJSON(url, { Venue: $(ddlsource).val(), Date: $(ddlsource2).val() }, function (data) {
+					var items = '';
+					$('#Session').empty();
+					$.each(data, function (i, date) {
+						items += "<option value='" + date.value + "'>" + date.text + "</option>";
+					});
+					$('#Session').html(items);
+				});
+
+			});
+		});
+
+	</script>
+
+
+
+}

@@ -1,0 +1,19 @@
+﻿@model List<BACS3403_Project.Models.Seat>;
+
+@{
+	ViewData["Title"] = "Print Seat QR";
+}
+
+<div class="row">
+	@{
+		var counter = 0;
+		foreach (var item in Model)
+		{
+			var url = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + item.SeatID;
+			<div class="col-4 text-center">
+				<img class="rounded" src="@url" alt="Alternate Text" />
+			</div>
+			counter++;
+		}
+	}
+</div>
