@@ -63,9 +63,11 @@
 				</li>
 				<hr />
 				<li class="active">
-					<a href="#">
-						<i class="fa fa-power-off fa-fw" aria-hidden="true" ></i> Logout
-					</a>
+					<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+						<button type="submit" class="nav-link btn btn-link text-secondary">
+							<i class="fa fa-power-off fa-fw" aria-hidden="true"></i> Logout
+						</button>
+					</form>
 				</li>
 
 			</ul>

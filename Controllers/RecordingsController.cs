@@ -10,9 +10,11 @@ using BACS3403_Project.Models;
 using Microsoft.AspNetCore.Identity;
 using BACS3403_Project.ViewModels;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BACS3403_Project.Controllers.Question
 {
+    [Authorize]
     public class RecordingsController : Controller
     {
         private readonly ApplicationDbContext _context;

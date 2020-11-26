@@ -9,9 +9,11 @@ using BACS3403_Project.Data;
 using BACS3403_Project.Models;
 using Microsoft.AspNetCore.Identity;
 using BACS3403_Project.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BACS3403_Project.Controllers
 {
+    [Authorize]
     public class QuestionGroupsController : Controller
     {
         private readonly ApplicationDbContext _context;

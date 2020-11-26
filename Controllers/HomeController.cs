@@ -20,7 +20,12 @@ namespace BACS3403_Project.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index","Recordings", new { part = 1});
+			if (User.Identity.IsAuthenticated)
+			{
+                return RedirectToAction("Index", "Recordings", new { part = 1 });
+            }
+
+            return RedirectToPage("/Account/Login", new { area = "Identity" }); ;
         }
 
         public IActionResult Privacy()
