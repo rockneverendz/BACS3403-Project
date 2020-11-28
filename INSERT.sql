@@ -807,3 +807,90 @@ INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID],
 INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1399, 39, N'sample ans', 1010, 1004, 1)
 INSERT INTO [dbo].[Answer] ([AnswerID], [Index], [WrittenAnswer], [CandidateID], [RecordingID], [Correctness]) VALUES (1400, 40, N'sample ans', 1010, 1004, 1)
 SET IDENTITY_INSERT [dbo].[Answer] OFF
+
+-- INSERT SEAT --
+DBCC CHECKIDENT ('[Seat]', RESEED, 0);
+GO
+
+SET IDENTITY_INSERT [dbo].[Seat] ON
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10001, N'2020-12-18 11:06:00', 1023, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10002, N'2020-12-18 11:02:00', 1030, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10003, N'2020-12-18 11:05:00', 1021, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10004, N'2020-12-18 11:07:00', 1025, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10005, N'2020-12-18 11:10:00', 1029, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10006, N'2020-12-18 11:05:00', 1014, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10007, N'2020-12-18 11:10:00', 1018, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10008, N'2020-12-18 11:04:00', 1007, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10009, N'2020-12-18 11:03:00', 1038, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10010, N'2020-12-18 11:04:00', 1027, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10011, N'2020-12-18 11:07:00', 1001, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10012, N'2020-12-18 11:02:00', 1003, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10013, N'2020-12-18 11:01:00', 1004, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10014, N'2020-12-18 11:05:00', 1017, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10015, N'2020-12-18 11:07:00', 1012, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10016, N'2020-12-18 11:04:00', 1022, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10017, N'2020-12-18 11:03:00', 1034, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10018, N'2020-12-18 11:07:00', 1032, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10019, N'2020-12-18 11:01:00', 1016, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10020, N'2020-12-18 11:06:00', 1013, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10021, N'2020-12-18 11:04:00', 1035, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10022, N'2020-12-18 11:01:00', 1006, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10023, N'2020-12-18 11:04:00', 1020, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10024, N'2020-12-18 11:03:00', 1019, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10025, N'2020-12-18 11:03:00', 1005, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10026, N'2020-12-18 11:02:00', 1037, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10027, N'2020-12-18 11:01:00', 1039, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10028, N'2020-12-18 11:02:00', 1024, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10029, N'2020-12-18 11:02:00', 1040, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10030, N'2020-12-18 11:05:00', 1026, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10031, N'2020-12-18 11:06:00', 1009, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10032, N'2020-12-18 11:05:00', 1036, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10033, N'2020-12-18 11:10:00', 1015, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10034, N'2020-12-18 11:10:00', 1033, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10035, N'2020-12-18 11:03:00', 1011, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10036, N'2020-12-18 11:10:00', 1028, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10037, N'2020-12-18 11:01:00', 1010, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10038, N'2020-12-18 11:06:00', 1008, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10039, N'2020-12-18 11:06:00', 1002, 1001)
+INSERT INTO [dbo].[Seat] ([SeatID], [TimeClaimed], [CandidateID], [TestID]) VALUES (10040, N'2020-12-18 11:07:00', 1031, 1001)
+SET IDENTITY_INSERT [dbo].[Seat] OFF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
