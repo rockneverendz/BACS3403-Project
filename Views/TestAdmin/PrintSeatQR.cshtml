@@ -3,17 +3,56 @@
 @{
 	ViewData["Title"] = "Print Seat QR";
 }
+<div id="printarea">
+	<div class="row justify-content-between mx-1">
+		<h5 class="align-bottom mb-0 pt-3">
+			Print Seat Number QR Code
+		</h5>
+		<span class="align-bottom pt-3">Test Details: @ViewBag.TestVenue - @ViewBag.TestDate - @ViewBag.TestSession</span>
+		<button id="printBtn" type="button" class="btn btn-primary px-3">Print</button>
+	</div>
+	<hr class="mt-1" />
 
-<div class="row">
-	@{
-		var counter = 0;
-		foreach (var item in Model)
-		{
-			var url = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + item.SeatID;
-			<div class="col-4 text-center">
-				<img class="rounded" src="@url" alt="Alternate Text" />
-			</div>
-			counter++;
+	<div class="row">
+		@{
+			var counter = 0;
+			foreach (var item in Model)
+			{
+				var url = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + item.SeatID;
+				<div class="col p-0 text-center">
+					<div class="card mb-3">
+						<div class="card-header">
+							<p class="m-0"><b>Seat ID: @item.SeatID</b></p>
+						</div>
+						<div class="card-body">
+							<img class="rounded" src="@url" alt="Alternate Text" />
+						</div>
+					</div>
+				</div>
+				counter++;
+			}
 		}
-	}
+	</div>
 </div>
+
+@section Scripts {
+
+	<script>
+		$('#printBtn').on('click', function () {
+
+			$('#sidebar').css('display', 'none');
+			$('.navbar').css('display', 'none');
+			$('#content').css('width', '100%');
+			$('footer').css('display', 'none');
+			$(this).css('display', 'none');
+			window.print();
+			$('#sidebar').css('display', '');
+			$('.navbar').css('display', '');
+			$('#content').css('width', 'calc(100% - 250px)');
+			$(this).css('display', '');
+		});
+
+	</script>
+
+
+}
