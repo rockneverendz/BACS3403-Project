@@ -1,0 +1,133 @@
+﻿@model BACS3403_Project.ViewModels.PrintAttendanceReportViewModel
+
+@{
+	Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - IELST Listening</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+	<!-- Font Awsome -->
+	<script src="https://kit.fontawesome.com/0bcbba3f41.js" crossorigin="anonymous"></script>
+	<style>
+		.printContainer {
+			margin: 50px 100px;
+		}
+
+		.back-to-top {
+			position: fixed;
+			bottom: 25px;
+			right: 25px;
+			display: none;
+			border-radius: 10px;
+		}
+	</style>
+
+</head>
+<body>
+	<!-- Page Content -->
+	<div class="printContainer">
+		<div class="row align-items-end justify-content-start">
+			<div class="col-3">
+				<img id="logoimg" src="~/resource/MainLogoAsset1.png" style="width: 200px">
+			</div>
+			<div class="col-5">
+				<h1>Attendance Report </h1>
+			</div>
+			<div class="col-3">
+				<div class="row">Print by: @User.Identity.Name</div>
+				<div class="row">Print Date: @(DateTime.Now)</div>
+			</div>
+			<div class="col-1">
+				<a id="backBtn" asp-action="ViewAttendance" class="btn btn-secondary mb-1">Back</a>
+				<button id="printBtn" class="btn btn-secondary" onclick="printThis()">Print</button>
+			</div>
+		</div>
+		<hr />
+		<div class="row align-items-end mx-3">
+			<div class="col">
+				<div class="row"><b>Test Venue: @(Model.Venue)</b></div>
+				<div class="row"><b>Test Date: @(Model.Date)</b></div>
+			</div>
+			<div class="col">
+				<div class="row"><b>Test Session: @(Model.Time)</b></div>
+			</div>
+		</div>
+		<hr />
+
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th scope="col">#No</th>
+					<th scope="col">Seat ID</th>
+					<th scope="col">Time Registered</th>
+					<th scope="col">Candidate ID</th>
+					<th scope="col">Name</th>
+					<th scope="col">Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (Model.CandidateAttendanceViewModels != null)
+				{
+					@foreach (var item in Model.CandidateAttendanceViewModels)
+					{
+						<tr>
+							<td>@(item.Index)</td>
+							<td>@(item.Seat)</td>
+							<td>@(item.TimeRegistered)</td>
+							<td>@(item.CandidateID)</td>
+							<td>@(item.CandidateName)</td>
+							<td>@(item.Status)</td>
+						</tr>
+					}
+				}
+
+			</tbody>
+		</table>
+
+		<a id="back-to-top" href="#" class="btn btn-outline-secondary btn-lg back-to-top" role="button">
+			<i class="fas fa-chevron-up"></i>
+		</a>
+	</div>
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+
+
+	<script>
+		$(document).ready(function () {
+			$(window).scroll(function () {
+				if ($(this).scrollTop() > 50) {
+					$('#back-to-top').fadeIn();
+				} else {
+					$('#back-to-top').fadeOut();
+				}
+			});
+			// scroll body to 0px on click
+			$('#back-to-top').click(function () {
+				$('body,html').animate({
+					scrollTop: 0
+				}, 400);
+				return false;
+			});
+		});
+
+		function printThis() {
+			$('#backBtn').css('display', 'none');
+			$('#printBtn').css('display', 'none');
+			window.print();
+			$('#backBtn').css('display', '');
+			$('#printBtn').css('display', '');
+
+		}
+
+	</script>
+
+</body>
+</html>
