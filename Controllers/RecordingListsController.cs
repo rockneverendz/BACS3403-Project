@@ -40,6 +40,7 @@ namespace BACS3403_Project.Controllers
             }
 
             var recordingDTO = _context.RecordingLists
+                                .Where(r => r.CandidateID == candidate.CandidateID)
                                 .Include(recordingLists => recordingLists.Recording.QuestionGroups)
                                 .OrderBy(item => item.Recording.Part)
                                 .ToArray();
