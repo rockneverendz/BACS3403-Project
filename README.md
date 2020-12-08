@@ -19,7 +19,6 @@ This is a backend server also a examiner portal for the Mobile IELTS Listening T
 
 ### Migrate Database
 1. Go to `Tools` > `NuGet Package Manager` > `Package Manager Console`.
-![](https://media.discordapp.net/attachments/751684116109590670/785842838259761172/unknown.png)
 
 2. Run the following command to drop the database if existed
 ```PowerShell
