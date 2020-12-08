@@ -14,5 +14,10 @@ namespace BACS3403_Project.Models
 
         public ICollection<Candidate> Candidates { get; set; }
         public ICollection<Seat> Seats { get; set; }
+
+        public DateTime DateTime()
+        {
+            return Date.Date.Add(Time.TimeOfDay);
+        }
     }
 }
