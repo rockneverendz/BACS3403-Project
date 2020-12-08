@@ -41,10 +41,12 @@ namespace BACS3403_Project.Controllers
         {
             Candidate candidate = await GetCandidateByToken(tokenDTO.Token);
 
-            if (candidate == null)
-            {
-                return NotFound();
-            }
+            if (candidate == null) return NotFound();
+            if (candidate.Status == "Completed") return BadRequest("Candidate has completed test.");
+            if (candidate.Status == "Examing") return BadRequest("Candidate is currently testing.");
+
+            var TimeEnd = candidate.Test.DateTime().Add(new TimeSpan(0, 40, 0));
+            if (DateTime.Now >= TimeEnd) return BadRequest("Test is already over");
 
             return candidate;
         }
