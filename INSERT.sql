@@ -1,3 +1,18 @@
+DELETE FROM [dbo].[Seat];
+DELETE FROM [dbo].[Answer];
+DELETE FROM [dbo].[RecordingList];
+DELETE FROM [dbo].[Candidate];
+DELETE FROM [dbo].[Test];
+DELETE FROM [dbo].[MarkScheme];
+DELETE FROM [dbo].[QuestionGroup];
+DELETE FROM [dbo].[Recording];
+DELETE FROM [dbo].[AspNetUsers];
+
+
+-- INSERT USER
+INSERT INTO [dbo].[AspNetUsers] ([Id], [UserName], [NormalizedUserName], [Email], [NormalizedEmail], [EmailConfirmed], [PasswordHash], [SecurityStamp], [ConcurrencyStamp], [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEnd], [LockoutEnabled], [AccessFailedCount], [Name]) VALUES (N'3865caf8-f86c-4b64-be4d-860929ee7e72', N'cycycyy999@gmail.com', N'CYCYCYY999@GMAIL.COM', N'cycycyy999@gmail.com', N'CYCYCYY999@GMAIL.COM', 1, N'AQAAAAEAACcQAAAAEKKo0sRuwJn7GKbI+2Plg+vzlniUlnV/ufB4KIRqrnRbKzVb8dF/qomB4OoR6tp5ew==', N'HINEDDW2U2WXUB75JQ4FWE7ESWTWVJZU', N'd867c7d5-bc06-4480-a8b0-2f210c0742b7', N'012345631912', 0, 0, NULL, 1, 0, NULL)
+
+
 -- INSERT RECORDING --
 DBCC CHECKIDENT ('[Recording]', RESEED, 0);
 GO
