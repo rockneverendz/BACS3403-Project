@@ -1,0 +1,26 @@
+﻿@model IEnumerable<BACS3403_Project.ViewModels.CandidateAttendanceViewModel>
+
+<table id="candidatesList" class="table table-hover table-bordered" style="width:100%">
+	<thead class="table-sm table-secondary justify-content-center">
+		<tr>
+			<th>Seat ID</th>
+			<th>Time Registered</th>
+			<th>Candidate ID</th>
+			<th>Name</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+		<tr class="rowContent" data-href="CandidateAnswers?id=@(item.CandidateID)">
+			<td>@item.Seat</td>
+			<td>@item.TimeRegistered</td>
+			<td>@item.CandidateID</td>
+			<td>@item.CandidateName</td>
+			<td>@item.Status</td>
+		</tr>
+		}
+	</tbody>
+</table>
+

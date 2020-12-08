@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BACS3403_Project.Data;
 using BACS3403_Project.Models;
 using BACS3403_Project.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BACS3403_Project.Controllers
 {
+	[Authorize]
 	public class GradesController : Controller
 	{
 		private readonly ApplicationDbContext _context;
