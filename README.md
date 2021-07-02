@@ -7,9 +7,11 @@
 > System is to provide an additional option which is to allow English listening tests to be conducted using a mobile phone. In which could reduce
 > the tools required, and further expand IELTS testing centers.
 
-### Know more about this project [here](https://github.com/rockneverendz/BACS3403-Project/blob/master/Mobile%20IELTS%20Listening%20Test%20System%20Poster.pdf).
+### Get to know more about this project [click here](https://github.com/rockneverendz/BACS3403-Project/blob/master/Mobile%20IELTS%20Listening%20Test%20System%20Poster.pdf).
 
-### This is a **backend server** of this project, also a **examiner portal** for the Mobile IELTS Listening Test System. Know more about the mobile application of the system [here](https://github.com/rockneverendz/BACS3403-Project-Mobile-Application).
+### This is a **backend server** of this project, also a **examiner portal** for the Mobile IELTS Listening Test System. 
+
+### To know more about the mobile application of the system [click here](https://github.com/rockneverendz/BACS3403-Project-Mobile-Application).
 
 # Sample screenshots (Examiner Portal)
 
