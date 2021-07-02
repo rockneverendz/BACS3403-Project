@@ -9,7 +9,7 @@
 
 ### Know more about this project [here](https://github.com/rockneverendz/BACS3403-Project/blob/master/Mobile%20IELTS%20Listening%20Test%20System%20Poster.pdf).
 
-### This is a **backend server** of this project, also a **examiner portal** for the Mobile IELTS Listening Test System.
+### This is a **backend server** of this project, also a **examiner portal** for the Mobile IELTS Listening Test System. Know more about the mobile application of the system [here](https://github.com/rockneverendz/BACS3403-Project-Mobile-Application).
 
 # Sample screenshots (Examiner Portal)
 
